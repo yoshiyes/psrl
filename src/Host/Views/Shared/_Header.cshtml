@@ -1,0 +1,179 @@
+@using System.Globalization
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    string NavClass(string controller)
+    {
+        return currentController == controller
+            ? "group flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-sm font-medium text-white"
+            : "group flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-700 hover:text-white";
+    }
+
+    var cultures = new[]
+    {
+        new { Code = "fr", Flag = "🇫🇷", Label = "Français" },
+        new { Code = "en", Flag = "🇬🇧", Label = "English" },
+    };
+    string currentCultureCode = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var currentCulture = cultures.FirstOrDefault(c => c.Code == currentCultureCode) ?? cultures[0];
+    var languageReturnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<header
+    id="page-header"
+    class="z-1 flex flex-none items-center bg-gray-800"
+>
+    <div class="container mx-auto px-4 lg:px-8 xl:max-w-7xl">
+        <div class="flex justify-between py-4">
+            <div class="flex items-center gap-2 lg:gap-6">
+                <a
+                    asp-controller="Home" asp-action="Index"
+                    class="group inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-100 hover:text-gray-300">
+
+                    <svg class="inline-block size-5 text-orange-400 transition group-hover:scale-110"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M8 1a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 1ZM10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM12.95 4.11a.75.75 0 1 0-1.06-1.06l-1.062 1.06a.75.75 0 0 0 1.061 1.062l1.06-1.061ZM15 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 15 8ZM11.89 12.95a.75.75 0 0 0 1.06-1.06l-1.06-1.062a.75.75 0 0 0-1.062 1.061l1.061 1.06ZM8 12a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 12ZM5.172 11.89a.75.75 0 0 0-1.061-1.062L3.05 11.89a.75.75 0 1 0 1.06 1.06l1.06-1.06ZM4 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 4 8ZM4.11 5.172A.75.75 0 0 0 5.173 4.11L4.11 3.05a.75.75 0 1 0-1.06 1.06l1.06 1.06Z"/>
+                    </svg>
+                    <span>Passerelle</span>
+                </a>
+                <nav class="hidden items-center gap-2 lg:flex">
+                    <a asp-controller="Home" asp-action="Index"
+                       class="@NavClass("Home")"
+                    >@L["Nav_Home"]</a>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-area="Admin" asp-controller="Links" asp-action="Index"
+                           class="@NavClass("Links")">
+                            <span>@L["Nav_AdminLinks"]</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Categories" asp-action="Index"
+                           class="@NavClass("Categories")">
+                            <span>@L["Nav_AdminCategories"]</span>
+                        </a>
+                    }
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <details id="lang-switcher" class="group relative">
+                    <summary
+                        title="@L["Header_Language"]"
+                        aria-label="@L["Header_Language"]"
+                        aria-haspopup="menu"
+                        class="inline-flex cursor-pointer list-none items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm leading-5 font-semibold text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-xs focus:ring-3 focus:ring-gray-600/40 active:border-gray-700 active:shadow-none [&::-webkit-details-marker]:hidden">
+                        <span class="inline-flex size-5 items-center justify-center text-base leading-none">@currentCulture.Flag</span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                             class="inline-block size-5 opacity-50 transition group-open:rotate-180">
+                            <path fill-rule="evenodd"
+                                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </summary>
+                    <div
+                        class="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-lg shadow-xl shadow-black/40">
+                        <div
+                            role="menu"
+                            aria-label="@L["Header_Language"]"
+                            class="divide-y divide-gray-700 rounded-lg bg-gray-800 ring-1 ring-gray-700">
+                            <div class="space-y-1 p-2.5">
+                                @foreach (var culture in cultures)
+                                {
+                                    <form method="post" action="/Culture/Set">
+                                        <input type="hidden" name="culture" value="@culture.Code"/>
+                                        <input type="hidden" name="returnUrl" value="@languageReturnUrl"/>
+                                        <button
+                                            type="submit"
+                                            role="menuitem"
+                                            class="group flex w-full items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-left text-sm font-medium text-gray-200 hover:bg-gray-700 hover:text-white active:border-gray-600">
+                                            <span class="text-base leading-none">@culture.Flag</span>
+                                            <span class="grow">@culture.Label</span>
+                                            @if (culture.Code == currentCultureCode)
+                                            {
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                     fill="currentColor"
+                                                     class="inline-block size-4 flex-none text-orange-400">
+                                                    <path fill-rule="evenodd"
+                                                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                                                          clip-rule="evenodd"/>
+                                                </svg>
+                                            }
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </details>
+                <a
+                    href="https://github.com/yoshiyes/psrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="@L["Header_GitRepo"]"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm leading-5 font-semibold text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-xs focus:ring-3 focus:ring-gray-600/40 active:border-gray-700 active:shadow-none">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                         class="inline-block size-5">
+                        <path fill-rule="evenodd"
+                              d="M6.28 4.22a.75.75 0 0 1 0 1.06L3.56 8l2.72 2.72a.75.75 0 1 1-1.06 1.06l-3.25-3.25a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0Zm3.44 0a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 1 1-1.06-1.06L12.44 8 9.72 5.28a.75.75 0 0 1 0-1.06Z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                </a>
+                <a
+                    href="/feed.xml"
+                    target="_blank"
+                    title="@L["Header_RssFeed"]"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm leading-5 font-semibold text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-xs focus:ring-3 focus:ring-gray-600/40 active:border-gray-700 active:shadow-none">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                         class="hi-micro hi-rss inline-block size-5">
+                        <circle cx="3.5" cy="12.5" r="1.5"/>
+                        <path d="M2 6.5a.75.75 0 0 1 .75-.75c3.866 0 7 3.134 7 7a.75.75 0 0 1-1.5 0 5.5 5.5 0 0 0-5.5-5.5A.75.75 0 0 1 2 6.5Z"/>
+                        <path d="M2 2.75A.75.75 0 0 1 2.75 2c6.213 0 11.25 5.037 11.25 11.25a.75.75 0 0 1-1.5 0c0-5.385-4.365-9.75-9.75-9.75A.75.75 0 0 1 2 2.75Z"/>
+                    </svg>
+                </a>
+                <button
+                    onclick="setTheme()"
+                    title="@L["Header_ThemeToggle"]"
+                    aria-label="@L["Header_ThemeToggle"]"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm leading-5 font-semibold text-gray-300 hover:border-gray-600 hover:text-gray-200 hover:shadow-xs focus:ring-3 focus:ring-gray-600/40 active:border-gray-700 active:shadow-none">
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                         class="hi-micro hi-moon inline-block size-5">
+                        <path
+                            d="M14.438 10.148c.19-.425-.321-.787-.748-.601A5.5 5.5 0 0 1 6.453 2.31c.186-.427-.176-.938-.6-.748a6.501 6.501 0 1 0 8.585 8.586Z"/>
+                    </svg>
+                </button>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form asp-controller="Auth" asp-action="Logout" method="post">
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-lg border border-orange-700 bg-orange-700 px-3 py-2 text-sm leading-5 font-semibold text-white hover:border-orange-600 hover:bg-orange-600 hover:text-white focus:ring-3 focus:ring-orange-400/50 active:border-orange-700 active:bg-orange-700 dark:focus:ring-orange-400/90">
+                            @L["Header_Logout"]
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    function setTheme() {
+        const root = document.documentElement;
+        const isDark = root.classList.contains('dark');
+
+        root.classList.toggle('dark', !isDark);
+        localStorage.theme = isDark ? 'light' : 'dark';
+    }
+
+    document.addEventListener('click', (event) => {
+        const details = document.getElementById('lang-switcher');
+        if (details && details.open && !details.contains(event.target)) {
+            details.open = false;
+        }
+    });
+</script>

@@ -1,0 +1,152 @@
+@using Passerelle.Domain.Entities
+@model Passerelle.Host.ViewModels.HomeIndexViewModel
+
+<div
+    class="min-w-full overflow-x-auto rounded-sm bg-white dark:border-gray-700 dark:bg-gray-800">
+    <table class="min-w-full align-middle text-sm whitespace-nowrap">
+        <thead>
+        <tr>
+            <th
+                class="border-b-2 border-gray-200/50 pr-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Name"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "title",
+                        Label = L["Sort_Label_Name"].Value,
+                        FormId = "links-filters-form"
+                    })
+                </div>
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Description"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "description",
+                        Label = L["Sort_Label_Description"].Value,
+                        FormId = "links-filters-form"
+                    })
+                </div>
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Links_Column_Categories"]
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_KeyDates"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "date",
+                        Label = L["Sort_Label_Date"].Value,
+                        FormId = "links-filters-form"
+                    })
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Links.Count == 0)
+        {
+            <tr>
+                <td colspan="4" class="px-4 py-10 text-center text-sm text-stone-500">@L["Links_Empty"]</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (Link link in Model.Links)
+            {
+                <tr
+                    class="border-b border-gray-100 dark:border-gray-700/50">
+                    <td class="py-3 pr-3">
+                        <a href="@link.Url" target="_blank" rel="noopener noreferrer"
+                           class="font-medium text-teal-700 hover:text-teal-900">@link.Title</a>
+                        <div class="mt-1 text-xs text-stone-500 break-all">@link.Url</div>
+                    </td>
+                    <td class="max-w-[10rem] p-3 break-words whitespace-normal text-gray-500 sm:max-w-[14rem] md:max-w-xs dark:text-gray-400">@link.Description</td>
+                    <td class="p-3">
+                        @{
+                            List<Category> categories = link.LinkCategories.Select(x => x.Category).ToList();
+                            const int maxVisibleCategories = 3;
+                            List<Category> hiddenCategories = categories.Skip(maxVisibleCategories).ToList();
+                        }
+                        @if (categories.Count == 0)
+                        {
+                            <span class="text-xs text-gray-400 dark:text-gray-500">&mdash;</span>
+                        }
+                        else
+                        {
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                @foreach (Category category in categories.Take(maxVisibleCategories))
+                                {
+                                    <div
+                                        class="inline-flex items-center rounded-full bg-emerald-200 px-2 py-1 text-sm leading-4 font-semibold text-emerald-700">
+                                        @category.Name
+                                    </div>
+                                }
+                                @if (hiddenCategories.Count > 0)
+                                {
+                                    string anchorId = $"cat-anchor-{link.Id:N}";
+                                    <div class="group relative inline-block" style="anchor-name: --@anchorId">
+                                        <button type="button"
+                                                title="@string.Join(", ", hiddenCategories.Select(c => c.Name))"
+                                                class="inline-flex cursor-default items-center gap-0.5 rounded-full bg-gray-100 px-2 py-1 text-sm leading-4 font-semibold text-gray-600 ring-1 ring-gray-200 hover:bg-gray-200 dark:bg-gray-700/60 dark:text-gray-300 dark:ring-gray-600">
+                                            +@hiddenCategories.Count
+                                        </button>
+                                        <div
+                                             style="position-anchor: --@anchorId"
+                                             class="js-cat-popover-panel invisible z-20 flex w-max max-w-xs flex-wrap gap-1.5 rounded-md border border-gray-200 bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 dark:border-gray-700 dark:bg-gray-800">
+                                            @foreach (Category category in hiddenCategories)
+                                            {
+                                                <div
+                                                    class="inline-flex items-center rounded-full bg-emerald-200 px-2 py-1 text-sm leading-4 font-semibold text-emerald-700">
+                                                    @category.Name
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </td>
+                    <td class="p-3 text-gray-500 dark:text-gray-400">
+                        <div class="space-y-1 text-xs">
+                            <div>
+                                <span class="text-gray-400 dark:text-gray-500">Créé le :</span>
+
+                                <time datetime="@link.CreatedAt.ToDateTimeUtc().ToString("O")"
+                                      class="js-local-date group relative inline-flex cursor-help font-medium text-gray-600 underline decoration-dotted underline-offset-2 dark:text-gray-300">
+                                    @link.CreatedAt.ToDateTimeUtc().ToString("dd/MM/yyyy")
+
+                                    <span class="js-local-time pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 rounded-md bg-gray-900 px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg group-hover:block dark:bg-gray-700">
+                                        @link.CreatedAt.ToDateTimeUtc().ToString("HH:mm:ss")
+                                    </span>
+                                </time>
+                            </div>
+
+                            <div>
+                                <span class="text-gray-400 dark:text-gray-500">Mis à jour le :</span>
+
+                                <time datetime="@link.UpdatedAt.ToDateTimeUtc().ToString("O")"
+                                      class="js-local-date group relative inline-flex cursor-help font-medium text-gray-600 underline decoration-dotted underline-offset-2 dark:text-gray-300">
+                                    @link.UpdatedAt.ToDateTimeUtc().ToString("dd/MM/yyyy")
+
+                                    <span class="js-local-time pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 rounded-md bg-gray-900 px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg group-hover:block dark:bg-gray-700">
+                                        @link.UpdatedAt.ToDateTimeUtc().ToString("HH:mm:ss")
+                                    </span>
+                                </time>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

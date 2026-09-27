@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: passerelle
+    volumes:
+      - db_data:/var/lib/postgresql
+    networks:
+      - links-network
+
+  app:
+    image: ghcr.io/yoshiyes/psrl:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=passerelle;Username=postgres;Password=password
+      AllowedHosts: "*" # In production, set your domain e.g. "mydomain.eu"
+      
+      # Admin user
+      UserAdmin__Email: admin@example.com
+      UserAdmin__Password: Admin12345@
+      
+      # Auth route
+      Authentication__AuthRoute: "/auth"
+      Authentication__LoginPath: "/auth/login"
+    depends_on:
+      - db
+    networks:
+      - links-network
+
+volumes:
+  db_data:
+
+networks:
+  links-network:
+    name: links-network

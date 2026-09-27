@@ -1,0 +1,98 @@
+@using Passerelle.Domain.Entities
+@model Passerelle.Host.ViewModels.AdminIndexViewModel
+
+<div
+    class="min-w-full overflow-x-auto rounded-sm bg-white dark:border-gray-700 dark:bg-gray-800">
+    <table class="min-w-full align-middle text-sm whitespace-nowrap">
+        <thead>
+        <tr>
+            <th
+                class="border-b-2 border-gray-200/50 pr-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Name"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "title",
+                        Label = L["Sort_Label_Name"].Value,
+                        FormId = "admin-links-filters-form"
+                    })
+                </div>
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Description"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "description",
+                        Label = L["Sort_Label_Description"].Value,
+                        FormId = "admin-links-filters-form"
+                    })
+                </div>
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Links_Column_Categories"]
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-right font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Links_Column_Actions"]
+            </th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+        @if (Model.Links.Count == 0)
+        {
+            <tr>
+                <td colspan="4" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    @L["Links_Empty"]
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (Link link in Model.Links)
+            {
+                <tr>
+                    <td class="py-3 pr-3">
+                        <a href="@link.Url" target="_blank" rel="noopener noreferrer"
+                           class="font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300">@link.Title</a>
+                        <div class="mt-1 text-xs text-gray-500 break-all dark:text-gray-400">@link.Url</div>
+                    </td>
+                    <td class="max-w-[10rem] p-3 break-words whitespace-normal text-gray-500 sm:max-w-[14rem] md:max-w-xs dark:text-gray-400">@link.Description</td>
+                    <td class="p-3">
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (Category category in link.LinkCategories.Select(x => x.Category))
+                            {
+                                <div
+                                    class="inline-flex rounded-full bg-emerald-200 px-2 py-1 text-sm leading-4 font-semibold text-emerald-700">
+                                    @category.Name
+                                </div>
+                            }
+                        </div>
+                    </td>
+                    <td class="p-3">
+                        <div class="flex justify-end gap-2">
+                            <button class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700"
+                                    hx-get="/admin/links/edit/@link.Id"
+                                    hx-target="#link-form-container"
+                                    hx-swap="innerHTML">
+                                @L["Admin_Common_Edit"]
+                            </button>
+
+                            <form hx-post="/admin/links/delete/@link.Id" hx-confirm="@L["Admin_Links_DeleteConfirm"]">
+                                @Html.AntiForgeryToken()
+                                <button class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/40 dark:text-red-400 dark:hover:bg-red-900/20">
+                                    @L["Admin_Common_Delete"]
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

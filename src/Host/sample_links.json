@@ -1,0 +1,310 @@
+{
+  "Categories": [
+    { "Slug": "dotnet", "Name": "Dotnet", "Emoji": "🖥️" },
+    { "Slug": "architecture", "Name": "Architecture", "Emoji": "🏛️" },
+    { "Slug": "frontend", "Name": "Frontend", "Emoji": "🎨" },
+    { "Slug": "productivite", "Name": "Productivité", "Emoji": "⚡" }
+  ],
+  "Links": [
+    {
+      "Title": "HTMX",
+      "Url": "https://htmx.org",
+      "Description": "Librairie légère pour enrichir le HTML avec des interactions serveur via des attributs.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "ASP.NET Core",
+      "Url": "https://learn.microsoft.com/aspnet/core",
+      "Description": "Documentation officielle pour créer des applications web et des API avec ASP.NET Core.",
+      "Categories": ["dotnet", "architecture"]
+    },
+    {
+      "Title": "Tailwind CSS",
+      "Url": "https://tailwindcss.com",
+      "Description": "Framework CSS utilitaire pour construire rapidement des interfaces modernes.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Entity Framework Core",
+      "Url": "https://learn.microsoft.com/ef/core",
+      "Description": "ORM moderne pour .NET, idéal pour manipuler une base de données en C#.",
+      "Categories": ["dotnet", "architecture"]
+    },
+    {
+      "Title": "Bootstrap",
+      "Url": "https://getbootstrap.com",
+      "Description": "Framework CSS populaire pour créer des interfaces responsives rapidement.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Alpine.js",
+      "Url": "https://alpinejs.dev",
+      "Description": "Petit framework JavaScript pour ajouter du comportement directement dans le HTML.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Vue.js",
+      "Url": "https://vuejs.org",
+      "Description": "Framework JavaScript progressif pour construire des interfaces utilisateur réactives.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "React",
+      "Url": "https://react.dev",
+      "Description": "Bibliothèque JavaScript pour construire des interfaces utilisateur basées sur des composants.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Svelte",
+      "Url": "https://svelte.dev",
+      "Description": "Framework frontend compilé pour créer des interfaces rapides et concises.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Angular",
+      "Url": "https://angular.dev",
+      "Description": "Framework complet pour développer des applications web côté client à grande échelle.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Next.js",
+      "Url": "https://nextjs.org",
+      "Description": "Framework React pour le rendu serveur, le routage et les applications web modernes.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Nuxt",
+      "Url": "https://nuxt.com",
+      "Description": "Framework Vue pour créer des sites performants et des applications universelles.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Lit",
+      "Url": "https://lit.dev",
+      "Description": "Bibliothèque légère pour créer des Web Components modernes.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Stimulus",
+      "Url": "https://stimulus.hotwired.dev",
+      "Description": "Framework JavaScript modeste pour enrichir progressivement le HTML existant.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Turbo",
+      "Url": "https://turbo.hotwired.dev",
+      "Description": "Outil Hotwire pour accélérer la navigation et mettre à jour les vues sans SPA complète.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "SolidJS",
+      "Url": "https://www.solidjs.com",
+      "Description": "Bibliothèque JavaScript réactive axée sur les performances et la simplicité.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Astro",
+      "Url": "https://astro.build",
+      "Description": "Framework web orienté contenu avec génération statique et îlots interactifs.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Remix",
+      "Url": "https://remix.run",
+      "Description": "Framework web axé sur le serveur, les formulaires et l’expérience utilisateur.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Vite",
+      "Url": "https://vitejs.dev",
+      "Description": "Outil de build frontend rapide pour le développement moderne.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Webpack",
+      "Url": "https://webpack.js.org",
+      "Description": "Bundler modulaire pour empaqueter les ressources JavaScript, CSS et images.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Parcel",
+      "Url": "https://parceljs.org",
+      "Description": "Bundler web simple à démarrer avec configuration minimale.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Rollup",
+      "Url": "https://rollupjs.org",
+      "Description": "Bundler JavaScript optimisé pour les bibliothèques et modules ES.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "PostCSS",
+      "Url": "https://postcss.org",
+      "Description": "Outil de transformation CSS basé sur des plugins.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Sass",
+      "Url": "https://sass-lang.com",
+      "Description": "Préprocesseur CSS apportant variables, imbrication et fonctions utilitaires.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Bulma",
+      "Url": "https://bulma.io",
+      "Description": "Framework CSS moderne basé sur Flexbox.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Foundation",
+      "Url": "https://get.foundation",
+      "Description": "Framework frontend pour créer des interfaces responsives et accessibles.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Material UI",
+      "Url": "https://mui.com",
+      "Description": "Bibliothèque de composants React implémentant Material Design.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "shadcn/ui",
+      "Url": "https://ui.shadcn.com",
+      "Description": "Collection de composants réutilisables pour React, Tailwind CSS et Radix UI.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Radix UI",
+      "Url": "https://www.radix-ui.com",
+      "Description": "Primitives accessibles pour construire des composants d’interface avancés.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Headless UI",
+      "Url": "https://headlessui.com",
+      "Description": "Composants UI non stylés pour React et Vue.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "DaisyUI",
+      "Url": "https://daisyui.com",
+      "Description": "Bibliothèque de composants basée sur Tailwind CSS.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Flowbite",
+      "Url": "https://flowbite.com",
+      "Description": "Composants et templates prêts à l’emploi pour Tailwind CSS.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "PrimeVue",
+      "Url": "https://primevue.org",
+      "Description": "Suite complète de composants UI pour Vue.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "PrimeReact",
+      "Url": "https://primereact.org",
+      "Description": "Collection riche de composants d’interface pour React.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Chart.js",
+      "Url": "https://www.chartjs.org",
+      "Description": "Bibliothèque JavaScript simple pour créer des graphiques interactifs.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "D3.js",
+      "Url": "https://d3js.org",
+      "Description": "Bibliothèque puissante pour la visualisation de données dans le navigateur.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "ECharts",
+      "Url": "https://echarts.apache.org",
+      "Description": "Bibliothèque de graphiques riche et performante pour le web.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Leaflet",
+      "Url": "https://leafletjs.com",
+      "Description": "Bibliothèque JavaScript légère pour intégrer des cartes interactives.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "MapLibre",
+      "Url": "https://maplibre.org",
+      "Description": "Bibliothèque open source pour afficher des cartes vectorielles sur le web.",
+      "Categories": ["frontend"]
+    },
+    {
+      "Title": "Swagger",
+      "Url": "https://swagger.io",
+      "Description": "Outils pour documenter, tester et concevoir des API.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "OpenAPI",
+      "Url": "https://www.openapis.org",
+      "Description": "Spécification standard pour décrire des API HTTP.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "Postman",
+      "Url": "https://www.postman.com",
+      "Description": "Plateforme populaire pour tester, documenter et automatiser des API.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "Insomnia",
+      "Url": "https://insomnia.rest",
+      "Description": "Client API ergonomique pour tester des requêtes HTTP et GraphQL.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "GraphQL",
+      "Url": "https://graphql.org",
+      "Description": "Langage de requête et runtime pour API centrés sur les données.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "Apollo GraphQL",
+      "Url": "https://www.apollographql.com",
+      "Description": "Outils et plateforme pour développer des API et clients GraphQL.",
+      "Categories": ["architecture"]
+    },
+    {
+      "Title": "Docker",
+      "Url": "https://www.docker.com",
+      "Description": "Plateforme pour empaqueter et exécuter des applications dans des conteneurs.",
+      "Categories": ["dotnet"]
+    },
+    {
+      "Title": "Kubernetes",
+      "Url": "https://kubernetes.io",
+      "Description": "Système d’orchestration de conteneurs pour déployer et gérer des applications.",
+      "Categories": ["dotnet"]
+    },
+    {
+      "Title": "GitHub",
+      "Url": "https://github.com",
+      "Description": "Plateforme d’hébergement de code source et de collaboration autour de Git.",
+      "Categories": ["dotnet"]
+    },
+    {
+      "Title": "GitLab",
+      "Url": "https://gitlab.com",
+      "Description": "Plateforme DevOps intégrant gestion de code, CI/CD et collaboration.",
+      "Categories": ["dotnet"]
+    },
+    {
+      "Title": "MDN Web Docs",
+      "Url": "https://developer.mozilla.org",
+      "Description": "Référence incontournable pour HTML, CSS, JavaScript et les API web.",
+      "Categories": ["frontend"]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+@model Passerelle.Host.ViewModels.AdminIndexViewModel
+
+<div id="links-table" class="grow p-5">
+    @await Html.PartialAsync("_LinksTable", Model)
+</div>
+
+<div class="grow border-t border-gray-200 px-5 py-4 dark:border-gray-700">
+    @await Html.PartialAsync("_Pagination", new Passerelle.Host.ViewModels.PaginationViewModel
+    {
+        Page = Model.Page,
+        TotalCount = Model.TotalCount,
+        TotalPages = Model.TotalPages,
+        FormId = "admin-links-filters-form"
+    })
+</div>

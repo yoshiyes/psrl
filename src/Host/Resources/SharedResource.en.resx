@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_AdminLinks" xml:space="preserve"><value>A: Links</value></data>
+  <data name="Nav_AdminCategories" xml:space="preserve"><value>A: Categories</value></data>
+
+  <data name="Header_GitRepo" xml:space="preserve"><value>Git repository</value></data>
+  <data name="Header_RssFeed" xml:space="preserve"><value>RSS feed</value></data>
+  <data name="Header_ThemeToggle" xml:space="preserve"><value>Toggle theme</value></data>
+  <data name="Header_Logout" xml:space="preserve"><value>Sign out</value></data>
+  <data name="Header_Language" xml:space="preserve"><value>Language</value></data>
+
+  <data name="Footer_BuiltIn" xml:space="preserve"><value>Built in</value></data>
+  <data name="Footer_By" xml:space="preserve"><value>by</value></data>
+
+  <data name="Rss_Title" xml:space="preserve"><value>Passerelle - Latest links</value></data>
+
+  <data name="Home_Title" xml:space="preserve"><value>Shared links</value></data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve"><value>Search a title, a description or a URL</value></data>
+  <data name="Search_Clear" xml:space="preserve"><value>Clear search</value></data>
+
+  <data name="Links_Column_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Links_Column_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Links_Column_Categories" xml:space="preserve"><value>Categories</value></data>
+  <data name="Links_Column_KeyDates" xml:space="preserve"><value>Key dates</value></data>
+  <data name="Links_Column_Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Links_Empty" xml:space="preserve"><value>No link found.</value></data>
+  <data name="Common_CreatedAt" xml:space="preserve"><value>Created on:</value></data>
+  <data name="Common_UpdatedAt" xml:space="preserve"><value>Updated on:</value></data>
+
+  <data name="Sort_By" xml:space="preserve"><value>Sort by {0}</value></data>
+  <data name="Sort_Label_Name" xml:space="preserve"><value>name</value></data>
+  <data name="Sort_Label_Description" xml:space="preserve"><value>description</value></data>
+  <data name="Sort_Label_Date" xml:space="preserve"><value>date</value></data>
+
+  <data name="Pagination_Page" xml:space="preserve"><value>Page</value></data>
+  <data name="Pagination_Of" xml:space="preserve"><value>of</value></data>
+  <data name="Pagination_Links_Plural" xml:space="preserve"><value>links</value></data>
+  <data name="Pagination_Links_Singular" xml:space="preserve"><value>link</value></data>
+  <data name="Pagination_Previous" xml:space="preserve"><value>Previous page</value></data>
+  <data name="Pagination_Next" xml:space="preserve"><value>Next page</value></data>
+
+  <data name="Login_Title" xml:space="preserve"><value>Sign in</value></data>
+  <data name="Login_Subtitle" xml:space="preserve"><value>Sign in to access the admin area.</value></data>
+  <data name="Login_RememberMe" xml:space="preserve"><value>Remember me</value></data>
+  <data name="Login_Submit" xml:space="preserve"><value>Sign in</value></data>
+
+  <data name="Auth_InvalidCredentials" xml:space="preserve"><value>Invalid credentials.</value></data>
+  <data name="Auth_AccountLockedOut" xml:space="preserve"><value>Account temporarily locked.</value></data>
+
+  <data name="Admin_Links_Title" xml:space="preserve"><value>Link administration</value></data>
+  <data name="Admin_Links_New" xml:space="preserve"><value>New link</value></data>
+  <data name="Admin_Links_SelectAction" xml:space="preserve"><value>Select an action to create or edit a link.</value></data>
+  <data name="Admin_Links_FilterAllCategories" xml:space="preserve"><value>All categories</value></data>
+  <data name="Admin_Links_DeleteConfirm" xml:space="preserve"><value>Delete this link ?</value></data>
+  <data name="Admin_LinkForm_EditTitle" xml:space="preserve"><value>Edit link</value></data>
+  <data name="Admin_LinkForm_CreateTitle" xml:space="preserve"><value>Create a link</value></data>
+  <data name="Admin_LinkForm_Categories" xml:space="preserve"><value>Categories</value></data>
+  <data name="Admin_LinkForm_Save" xml:space="preserve"><value>Save</value></data>
+
+  <data name="Admin_Categories_Title" xml:space="preserve"><value>Category administration</value></data>
+  <data name="Admin_Categories_New" xml:space="preserve"><value>New category</value></data>
+  <data name="Admin_Categories_SearchPlaceholder" xml:space="preserve"><value>Search a category</value></data>
+  <data name="Admin_Categories_SelectAction" xml:space="preserve"><value>Select an action to create or edit a category.</value></data>
+  <data name="Admin_Categories_Column_Slug" xml:space="preserve"><value>Slug</value></data>
+  <data name="Admin_Categories_Empty" xml:space="preserve"><value>No category found.</value></data>
+  <data name="Admin_Categories_DeleteConfirm" xml:space="preserve"><value>Delete this category ?</value></data>
+  <data name="Admin_Categories_Created" xml:space="preserve"><value>Category created.</value></data>
+  <data name="Admin_Categories_Updated" xml:space="preserve"><value>Category updated.</value></data>
+  <data name="Admin_Categories_Deleted" xml:space="preserve"><value>Category deleted.</value></data>
+  <data name="Admin_Categories_DeleteBlocked" xml:space="preserve"><value>Cannot delete: the category is still associated with links.</value></data>
+  <data name="Admin_CategoryForm_Emoji" xml:space="preserve"><value>Emoji (optional)</value></data>
+  <data name="Admin_CategoryForm_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Admin_CategoryForm_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Admin_CategoryForm_Edit" xml:space="preserve"><value>Edit</value></data>
+
+  <data name="Admin_Common_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Admin_Common_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Admin_Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+
+  <data name="Validation_Email_Required" xml:space="preserve"><value>Email is required.</value></data>
+  <data name="Validation_Email_Invalid" xml:space="preserve"><value>Invalid email.</value></data>
+  <data name="Validation_Password_Required" xml:space="preserve"><value>Password is required.</value></data>
+  <data name="Validation_Title_Required" xml:space="preserve"><value>Title is required.</value></data>
+  <data name="Validation_Title_Length" xml:space="preserve"><value>The title must be between 2 and 160 characters.</value></data>
+  <data name="Validation_Url_Required" xml:space="preserve"><value>The URL is required.</value></data>
+  <data name="Validation_Url_Invalid" xml:space="preserve"><value>The URL is not valid.</value></data>
+  <data name="Validation_Description_Required" xml:space="preserve"><value>The description is required.</value></data>
+  <data name="Validation_Description_Length" xml:space="preserve"><value>The description must be between 10 and 600 characters.</value></data>
+  <data name="Validation_Categories_Min" xml:space="preserve"><value>Select at least one category.</value></data>
+  <data name="Validation_Name_Required" xml:space="preserve"><value>The name is required.</value></data>
+  <data name="Validation_Name_Length" xml:space="preserve"><value>The name must be between 2 and 80 characters.</value></data>
+  <data name="Validation_Emoji_Length" xml:space="preserve"><value>The emoji must not exceed 32 characters.</value></data>
+  <data name="Validation_Emoji_Invalid" xml:space="preserve"><value>This field must contain a valid emoji.</value></data>
+
+  <data name="Field_Title" xml:space="preserve"><value>Title</value></data>
+  <data name="Field_Url" xml:space="preserve"><value>URL</value></data>
+  <data name="Field_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Field_Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Field_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Field_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Field_Emoji" xml:space="preserve"><value>Emoji</value></data>
+  <data name="Field_RememberMe" xml:space="preserve"><value>Remember me</value></data>
+</root>

@@ -1,0 +1,116 @@
+@using Passerelle.Domain.Entities
+@model Passerelle.Host.ViewModels.CategoriesIndexViewModel
+
+
+<div
+    class="min-w-full overflow-x-auto rounded-sm bg-white dark:border-gray-700 dark:bg-gray-800">
+    <table class="min-w-full align-middle text-sm whitespace-nowrap">
+        <thead>
+        <tr>
+            <th class="border-b-2 border-gray-200/50 pr-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Name"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "name",
+                        Label = L["Sort_Label_Name"].Value,
+                        FormId = "categories-filters-form"
+                    })
+                </div>
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Admin_Categories_Column_Slug"]
+            </th>
+            <th
+                class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Links_Column_KeyDates"]
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-right font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">@L["Links_Column_Actions"]</th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+        @if (Model.Categories.Count == 0)
+        {
+            <tr>
+                <td colspan="4" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    @L["Admin_Categories_Empty"]
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (Category category in Model.Categories)
+            {
+                <tr>
+                    <td class="py-3 pr-3">
+                        <span class="font-medium text-gray-900 dark:text-gray-100">
+                            @if (!string.IsNullOrWhiteSpace(category.Emoji))
+                            {
+                                <span class="mr-1" aria-hidden="true">@category.Emoji</span>
+                            }@category.Name
+                        </span>
+                    </td>
+
+                    <td class="p-3 text-gray-500 dark:text-gray-400">@category.Slug</td>
+                    <td class="p-3 text-gray-500 dark:text-gray-400">
+                        <div class="space-y-1 text-xs">
+                            <div>
+                                <span class="text-gray-400 dark:text-gray-500">@L["Common_CreatedAt"]</span>
+
+                                <time datetime="@category.CreatedAt.ToDateTimeUtc().ToString("O")"
+                                      class="js-local-date group relative inline-flex cursor-help font-medium text-gray-600 underline decoration-dotted underline-offset-2 dark:text-gray-300">
+                                    @category.CreatedAt.ToDateTimeUtc().ToString("dd/MM/yyyy")
+
+                                    <span class="js-local-time pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 rounded-md bg-gray-900 px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg group-hover:block dark:bg-gray-700">
+                                        @category.CreatedAt.ToDateTimeUtc().ToString("HH:mm:ss")
+                                    </span>
+                                </time>
+                            </div>
+
+                            <div>
+                                <span class="text-gray-400 dark:text-gray-500">@L["Common_UpdatedAt"]</span>
+
+                                <time datetime="@category.UpdatedAt.ToDateTimeUtc().ToString("O")"
+                                      class="js-local-date group relative inline-flex cursor-help font-medium text-gray-600 underline decoration-dotted underline-offset-2 dark:text-gray-300">
+                                    @category.UpdatedAt.ToDateTimeUtc().ToString("dd/MM/yyyy")
+
+                                    <span class="js-local-time pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 rounded-md bg-gray-900 px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg group-hover:block dark:bg-gray-700">
+                                        @category.UpdatedAt.ToDateTimeUtc().ToString("HH:mm:ss")
+                                    </span>
+                                </time>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="p-3">
+                        <div class="flex justify-end gap-2">
+                            <button class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700"
+                                    hx-get="/admin/categories/edit/@category.Id"
+                                    hx-target="#category-form-container"
+                                    hx-swap="innerHTML">
+                                @L["Admin_Common_Edit"]
+                            </button>
+
+                            <form method="post"
+                                  action="/admin/categories/delete/@category.Id"
+                                  hx-post="/admin/categories/delete/@category.Id"
+                                  hx-confirm="@L["Admin_Categories_DeleteConfirm"]"
+                                  hx-target="#category-form-container"
+                                  hx-swap="innerHTML">
+                                @Html.AntiForgeryToken()
+
+                                <button class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/40 dark:text-red-400 dark:hover:bg-red-900/20">
+                                    @L["Admin_Common_Delete"]
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
