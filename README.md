@@ -7,6 +7,8 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791.svg)
 ![SQLite](https://img.shields.io/badge/SQLite-3-003B57.svg)
 
+![alt text](./docs/Main.png "Home page")
+
 ## Features
 
 - **Public link board** with search, filtering, sorting, and pagination.
@@ -15,6 +17,7 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 - **Dual database support** — PostgreSQL (with native full-text search) or SQLite (embedded).
 - **Dark mode** with `localStorage` and `prefers-color-scheme` support.
 - **NO SPA** — fast server rendering powered by HTMX 4.
+- **Multi-language support** — English and French.
 
 ## Tech stack
 
