@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -17,9 +18,7 @@ public static class Startup
             .ReadFrom.Configuration(builder.Configuration)
             .ReadFrom.Services(services));
 
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
-                o.UseNodaTime()));
+        builder.UseDatabase();
 
         builder.Services.AddScoped<ILinkRepository, LinkRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -108,5 +107,61 @@ public static class Startup
             pattern: "{controller:regex(^(?!Auth$).*)=Home}/{action=Index}/{id?}");
         app.MapRazorPages();
         app.UseHealthChecks("/health");
+    }
+
+    private static void UseDatabase(this IHostApplicationBuilder builder)
+    {
+        string provider = builder.Configuration["DatabaseProvider"] ?? "";
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+
+        bool isSqlite = provider.Equals("SQLite", StringComparison.OrdinalIgnoreCase)
+                        || connectionString.Contains("Data Source=", StringComparison.OrdinalIgnoreCase)
+                        || connectionString.EndsWith(".db", StringComparison.OrdinalIgnoreCase)
+                        || connectionString.EndsWith(".sqlite", StringComparison.OrdinalIgnoreCase);
+
+        if (isSqlite)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+                connectionString = "Data Source=data/passerelle.db";
+
+            EnsureSqliteDirectoryExists(connectionString);
+
+            builder.Services.AddDbContext<ApplicationDbContext, SqliteApplicationDbContext>(options =>
+                options.UseSqlite(connectionString, o => o.UseNodaTime()));
+            
+            Log.Information("Use SQLite database");
+        }
+        else
+        {
+            builder.Services.AddDbContext<ApplicationDbContext, PostgreSqlApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString, o => o.UseNodaTime()));
+            
+            Log.Information("Use PostgreSql database");
+        }
+    }
+
+    private static void EnsureSqliteDirectoryExists(string connectionString)
+    {
+        try
+        {
+            Match match = Regex.Match(connectionString, @"Data Source=([^;]+)", RegexOptions.IgnoreCase);
+
+            if (!match.Success) return;
+            
+            string path = match.Groups[1].Value.Trim();
+
+            if (string.IsNullOrEmpty(path) || path == ":memory:") return;
+            
+            string? dir = Path.GetDirectoryName(path);
+            
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+        }
+        catch
+        {
+            // Ignore if connection string cannot be parsed as a file path
+        }
     }
 }

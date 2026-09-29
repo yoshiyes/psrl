@@ -24,43 +24,44 @@ public sealed class LinkRepository(ApplicationDbContext db) : ILinkRepository
         {
             string cleanQuery = query.Trim();
             string term = cleanQuery.ToLower();
-            string? prefixQuery = !cleanQuery.Contains('"') ? FormatPrefixQuery(cleanQuery) : null;
 
-            if (prefixQuery is not null)
+            if (db.Database.IsSqlite())
             {
                 sql = sql.Where(x =>
-                    x.SearchVector.Matches(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery)) ||
+                    x.Title.ToLower().Contains(term) ||
+                    x.Description.ToLower().Contains(term) ||
                     x.Url.ToLower().Contains(term));
 
                 sql = sort switch
                 {
-                    "relevance" => sql.OrderByDescending(x => x.SearchVector.Rank(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery)))
-                        .ThenByDescending(x => x.CreatedAt),
                     "title_asc" => sql.OrderBy(x => x.Title),
                     "title_desc" => sql.OrderByDescending(x => x.Title),
                     "description_asc" => sql.OrderBy(x => x.Description),
                     "description_desc" => sql.OrderByDescending(x => x.Description),
                     "date_asc" or "oldest" => sql.OrderBy(x => x.CreatedAt),
-                    _ => sql.OrderByDescending(x => x.SearchVector.Rank(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery)))
-                        .ThenByDescending(x => x.CreatedAt)
+                    _ => sql
                 };
             }
-            else
+            else // PostgreSQL
             {
+                string? prefixQuery = !cleanQuery.Contains('"') ? FormatPrefixQuery(cleanQuery) : null;
+
                 sql = sql.Where(x =>
-                    x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(TextSearchConfig, cleanQuery)) ||
+                    x.SearchVector!.Matches(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery)) ||
                     x.Url.ToLower().Contains(term));
 
                 sql = sort switch
                 {
-                    "relevance" => sql.OrderByDescending(x => x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(TextSearchConfig, cleanQuery)))
+                    "relevance" => sql.OrderByDescending(x =>
+                            x.SearchVector!.Rank(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery ?? cleanQuery)))
                         .ThenByDescending(x => x.CreatedAt),
                     "title_asc" => sql.OrderBy(x => x.Title),
                     "title_desc" => sql.OrderByDescending(x => x.Title),
                     "description_asc" => sql.OrderBy(x => x.Description),
                     "description_desc" => sql.OrderByDescending(x => x.Description),
                     "date_asc" or "oldest" => sql.OrderBy(x => x.CreatedAt),
-                    _ => sql.OrderByDescending(x => x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(TextSearchConfig, cleanQuery)))
+                    _ => sql.OrderByDescending(x =>
+                            x.SearchVector!.Rank(EF.Functions.ToTsQuery(TextSearchConfig, prefixQuery ?? cleanQuery)))
                         .ThenByDescending(x => x.CreatedAt)
                 };
             }

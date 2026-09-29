@@ -6,22 +6,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using Passerelle.Host.Data;
 
 #nullable disable
 
-namespace Passerelle.Host.Migrations
+namespace Passerelle.Host.Migrations.PostgreSql
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260823193640_Initial")]
-    partial class Initial
+    [DbContext(typeof(PostgreSqlApplicationDbContext))]
+    [Migration("20260929201636_EnableNullableFullTextSearch")]
+    partial class EnableNullableFullTextSearch
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.11")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -273,6 +274,11 @@ namespace Passerelle.Host.Migrations
                         .HasMaxLength(1200)
                         .HasColumnType("character varying(1200)");
 
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComputedColumnSql("setweight(to_tsvector('unaccent_simple', coalesce(\"Title\", '')), 'A') || setweight(to_tsvector('unaccent_simple', coalesce(\"Description\", '')), 'B') || setweight(to_tsvector('unaccent_simple', coalesce(\"Url\", '') || ' ' || regexp_replace(coalesce(\"Url\", ''), '[^a-zA-Z0-9]+', ' ', 'g')), 'C')", true);
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(160)
@@ -287,6 +293,10 @@ namespace Passerelle.Host.Migrations
                         .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SearchVector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.ToTable("Links");
                 });

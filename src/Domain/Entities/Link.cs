@@ -12,7 +12,7 @@ public class Link : AuditableEntity
 
     [Required] [StringLength(1200)] public string Description { get; set; } = string.Empty;
 
-    public NpgsqlTsVector SearchVector { get; set; } = null!;
+    public NpgsqlTsVector? SearchVector { get; set; }
 
     public virtual ICollection<LinkCategory> LinkCategories { get; set; } = [];
 }

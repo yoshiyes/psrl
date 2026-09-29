@@ -6,7 +6,7 @@ using Passerelle.Domain.Entities;
 
 namespace Passerelle.Host.Data;
 
-public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+public class ApplicationDbContext(DbContextOptions options)
     : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Link> Links => Set<Link>();
@@ -77,19 +77,6 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
             .Property(c => c.Description)
             .IsRequired()
             .HasMaxLength(1200);
-
-        modelBuilder.Entity<Link>()
-            .Property(c => c.SearchVector)
-            .HasComputedColumnSql(
-                "setweight(to_tsvector('unaccent_simple', coalesce(\"Title\", '')), 'A') || " +
-                "setweight(to_tsvector('unaccent_simple', coalesce(\"Description\", '')), 'B') || " +
-                "setweight(to_tsvector('unaccent_simple', coalesce(\"Url\", '') || ' ' || regexp_replace(coalesce(\"Url\", ''), '[^a-zA-Z0-9]+', ' ', 'g')), 'C')",
-                stored: true);
-
-        
-        modelBuilder.Entity<Link>()
-            .HasIndex(c => c.SearchVector)
-            .HasMethod("GIN");
 
         #endregion
     }

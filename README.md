@@ -3,25 +3,27 @@
 A self-hosted link aggregator for curating and sharing links, organized by categories.
 
 ![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)
-![.NET](https://img.shields.io/badge/.NET-10-512BD4.svg)
+![.[Host.csproj](src/Host/Host.csproj)NET](https://img.shields.io/badge/.NET-10-512BD4.svg)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791.svg)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57.svg)
 
 ## Features
 
 - **Public link board** with search, filtering, sorting, and pagination.
 - **RSS feed** at `/feed.xml` (last 50 links).
 - **Admin area** (`/admin`) — full CRUD management for links and categories.
+- **Dual database support** — PostgreSQL (with native full-text search) or SQLite (embedded).
 - **Dark mode** with `localStorage` and `prefers-color-scheme` support.
 - **NO SPA** — fast server rendering powered by HTMX 2.
 
 ## Tech stack
 
-| Layer    | Technology                                      |
-| -------- | ----------------------------------------------- |
-| Backend  | .NET 10, ASP.NET Core MVC                       |
-| Views    | Razor Views, Areas, HTMX 2                      |
-| Database | PostgreSQL 18, Entity Framework Core 10, Npgsql |
-| CSS      | Tailwind CSS 4                                  |
+| Layer    | Technology                                                  |
+| -------- | ----------------------------------------------------------- |
+| Backend  | .NET 10, ASP.NET Core MVC                                   |
+| Views    | Razor Views, Areas, HTMX 2                                  |
+| Database | PostgreSQL 18 or SQLite 3, Entity Framework Core 10, NodaTime |
+| CSS      | Tailwind CSS 4                                              |
 
 ## Project structure
 
@@ -50,7 +52,9 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 
 The fastest way to run Passerelle is using Docker Compose.
 
-### 1. Create a `compose.yaml` file
+### Option A: With PostgreSQL (Recommended for multi-user / large volume)
+
+Use the default `compose.yaml`:
 
 ```yaml
 services:
@@ -61,6 +65,7 @@ services:
     ports:
       - "8080:80"
     environment:
+      DatabaseProvider: "PostgreSql"
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=passerelle;Username=postgres;Password=change_me_db_password
       AllowedHosts: "*" # In production, set your domain e.g. "links.example.com"
       UserAdmin__Email: admin@example.com
@@ -85,10 +90,39 @@ volumes:
   db_data:
 ```
 
-### 2. Start the services
-
 ```bash
 docker compose up -d
+```
+
+### Option B: With SQLite (Lightweight, single container, zero database dependencies)
+
+Use `compose.sqlite.yaml`
+
+```yaml
+services:
+  app:
+    image: ghcr.io/yoshiyes/psrl:latest
+    container_name: passerelle-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      DatabaseProvider: "SQLite"
+      ConnectionStrings__DefaultConnection: "Data Source=/app/data/passerelle.db"
+      AllowedHosts: "*"
+      UserAdmin__Email: admin@example.com
+      UserAdmin__Password: ChangeMe12345@
+      Authentication__AuthRoute: "/auth"
+      Authentication__LoginPath: "/auth/login"
+    volumes:
+      - passerelle_data:/app/data
+
+volumes:
+  passerelle_data:
+```
+
+```bash
+docker compose -f compose.sqlite.yaml up -d
 ```
 
 ### 3. Access the application
@@ -162,14 +196,15 @@ On first startup, the application creates a default admin account based on the c
 
 Passerelle can be configured via `src/Host/appsettings.json` or environment variables (using the `__` separator):
 
-| Key / Environment Variable | Description | Default                                                                           |
-|---|---|-----------------------------------------------------------------------------------|
-| `ConnectionStrings__DefaultConnection` | PostgreSQL connection string | `Host=localhost;Port=5432;Database=passerelle;Username=postgres;Password=password` |
-| `UserAdmin__Email` | Email for the initial administrator | `admin@linkshare.local`                                                           |
-| `UserAdmin__Password` | Password for the initial administrator | `Admin12345@`                                                                     |
-| `Authentication__AuthRoute` | Base route for auth controller | `/auth`                                                                           |
-| `Authentication__LoginPath` | URL path for the login page | `/auth/login`                                                                     |
-| `AllowedHosts` | Allowed host headers | `*` (ex: yourdomain.eu)                                                           |
+| Key / Environment Variable | Description | Default |
+|---|---|---|
+| `DatabaseProvider` | Database engine (`PostgreSql` or `Sqlite`). Auto-detected if connection string contains `Data Source=`. | `SQLite` |
+| `ConnectionStrings__DefaultConnection` | Database connection string. For SQLite, e.g. `Data Source=data/passerelle.db`. | `Host=localhost;Port=5432;Database=passerelle;Username=postgres;Password=password` |
+| `UserAdmin__Email` | Email for the initial administrator | `admin@linkshare.local` |
+| `UserAdmin__Password` | Password for the initial administrator | `Admin12345@` |
+| `Authentication__AuthRoute` | Base route for auth controller | `/auth` |
+| `Authentication__LoginPath` | URL path for the login page | `/auth/login` |
+| `AllowedHosts` | Allowed host headers | `*` (ex: yourdomain.eu) |
 
 ---
 
@@ -190,9 +225,14 @@ git push origin v1.0.0
 
 To generate a new EF Core migration after modifying entities:
 
+### For PostgreSQL
 ```bash
-dotnet tool install --global dotnet-ef 
-dotnet ef migrations add <MigrationName> --project src/Host
+dotnet ef migrations add <MigrationName> --project src/Host --context PostgreSqlApplicationDbContext --output-dir Migrations/PostgreSql
+```
+
+### For SQLite
+```bash
+dotnet ef migrations add <MigrationName> --project src/Host --context SqliteApplicationDbContext --output-dir Migrations/Sqlite
 ```
 
 ## Testing

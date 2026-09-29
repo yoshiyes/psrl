@@ -1,0 +1,24 @@
+services:
+  app:
+    image: ghcr.io/yoshiyes/psrl:latest
+    container_name: passerelle-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      DatabaseProvider: "SQLite"
+      ConnectionStrings__DefaultConnection: "Data Source=/app/data/passerelle.db"
+      AllowedHosts: "*" # In production, set your domain e.g. "mydomain.eu"
+      
+      # Admin user
+      UserAdmin__Email: admin@example.com
+      UserAdmin__Password: Admin12345@
+      
+      # Auth route
+      Authentication__AuthRoute: "/auth"
+      Authentication__LoginPath: "/auth/login"
+    volumes:
+      - passerelle_data:/app/data
+
+volumes:
+  passerelle_data:
