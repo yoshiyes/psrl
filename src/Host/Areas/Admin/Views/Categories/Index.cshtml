@@ -155,9 +155,10 @@
         toggleClearSearchButton();
     }
 
-    document.body.addEventListener("htmx:configRequest", function (event) {
+    document.body.addEventListener("htmx:config:request", function (event) {
         const form = document.getElementById("categories-filters-form");
-        if (event.detail.elt !== form) {
+        const ctx = event.detail.ctx;
+        if (ctx?.sourceElement !== form) {
             return;
         }
 
@@ -168,8 +169,8 @@
             return;
         }
 
-        const triggeringEvent = event.detail.triggeringEvent;
-        const submitter = triggeringEvent?.submitter;
+        const triggeringEvent = ctx.sourceEvent;
+        const submitter = ctx.request?.submitter || triggeringEvent?.submitter;
         const target = triggeringEvent?.target;
 
         const isPaginationButton = submitter?.name === "page";
@@ -178,16 +179,18 @@
 
         if (isPaginationButton) {
             pageInput.value = submitter.value;
+            ctx.request.body.set("page", submitter.value);
             return;
         }
 
         if (isSortButton) {
             sortInput.value = submitter.value;
+            ctx.request.body.set("sort", submitter.value);
         }
 
         if (isSortButton || isSearchInput) {
             pageInput.value = "1";
-            event.detail.parameters.page = "1";
+            ctx.request.body.set("page", "1");
         }
     });
 </script>

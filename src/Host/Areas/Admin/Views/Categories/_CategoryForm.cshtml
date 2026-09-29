@@ -10,8 +10,8 @@
 <form method="post"
       action="@formAction"
       hx-post="@formAction"
-      hx-target="#category-form-container"
-      hx-swap="innerHTML"
+      hx-target:inherited="#category-form-container"
+      hx-swap:inherited="innerHTML"
       class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-700 dark:bg-gray-800">
     @Html.AntiForgeryToken()
 

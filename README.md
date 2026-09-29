@@ -14,14 +14,14 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 - **Admin area** (`/admin`) — full CRUD management for links and categories.
 - **Dual database support** — PostgreSQL (with native full-text search) or SQLite (embedded).
 - **Dark mode** with `localStorage` and `prefers-color-scheme` support.
-- **NO SPA** — fast server rendering powered by HTMX 2.
+- **NO SPA** — fast server rendering powered by HTMX 4.
 
 ## Tech stack
 
 | Layer    | Technology                                                  |
 | -------- | ----------------------------------------------------------- |
 | Backend  | .NET 10, ASP.NET Core MVC                                   |
-| Views    | Razor Views, Areas, HTMX 2                                  |
+| Views    | Razor Views, Areas, HTMX 4                                  |
 | Database | PostgreSQL 18 or SQLite 3, Entity Framework Core 10, NodaTime |
 | CSS      | Tailwind CSS 4                                              |
 
@@ -177,7 +177,7 @@ npm run tw:build   # Optimized production build
 
 ## Default administrator
 
-On first startup, the application creates a default admin account based on the configuration (`UserAdmin` settings):
+On the first startup, the application creates a default admin account based on the configuration (`UserAdmin` settings):
 
 | Setting | Default (Development) |
 |---|---|
