@@ -35,7 +35,7 @@ public class LinksController(ILinkRepository linkRepository, ICategoryRepository
             Message = message
         };
 
-        if (Request.Headers.TryGetValue("HX-Request", out StringValues isHtmx) && isHtmx == "true")
+        if (Request.Headers.TryGetValue("HX-Request", out StringValues isHtmx) && isHtmx == "true" && !Request.Headers.ContainsKey("HX-History-Restore-Request"))
             return PartialView("_LinksResults", vm);
 
         return View(vm);

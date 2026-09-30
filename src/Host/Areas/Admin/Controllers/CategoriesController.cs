@@ -33,7 +33,7 @@ public class CategoriesController(
             TotalCount = total
         };
 
-        if (Request.Headers.TryGetValue("HX-Request", out StringValues isHtmx) && isHtmx == "true")
+        if (Request.Headers.TryGetValue("HX-Request", out StringValues isHtmx) && isHtmx == "true" && !Request.Headers.ContainsKey("HX-History-Restore-Request"))
             return PartialView("_CategoriesResults", vm);
 
         return View(vm);
