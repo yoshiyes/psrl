@@ -53,6 +53,7 @@
 
         <form
             id="categories-filters-form"
+            data-filters-form
             class="flex flex-col gap-3 bg-gray-50 px-5 py-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left dark:bg-gray-700/50"
             hx-get="@Url.Action("Index", "Categories")"
             hx-target="#categories-results"
@@ -92,6 +93,7 @@
                     <button
                         type="button"
                         id="clear-search"
+                        data-clear-search
                         class="absolute inset-y-0 right-0 my-px mr-px flex w-10 items-center justify-center rounded-r-lg text-gray-400 transition hover:text-gray-700 focus:outline-none focus:ring-3 focus:ring-orange-500/30 dark:text-gray-500 dark:hover:text-gray-200"
                         aria-label="@L["Search_Clear"]"
                         title="@L["Search_Clear"]">
@@ -132,65 +134,6 @@
     }
 </style>
 
-<script>
-    const searchInput = document.getElementById("search");
-    const clearSearchButton = document.getElementById("clear-search");
-
-    if (searchInput && clearSearchButton) {
-        const toggleClearSearchButton = () => {
-            clearSearchButton.classList.toggle("hidden", searchInput.value.length === 0);
-        };
-
-        clearSearchButton.addEventListener("click", () => {
-            searchInput.value = "";
-            searchInput.focus();
-            toggleClearSearchButton();
-
-            searchInput.dispatchEvent(new Event("input", {
-                bubbles: true
-            }));
-        });
-
-        searchInput.addEventListener("input", toggleClearSearchButton);
-        toggleClearSearchButton();
-    }
-
-    document.body.addEventListener("htmx:config:request", function (event) {
-        const form = document.getElementById("categories-filters-form");
-        const ctx = event.detail.ctx;
-        if (ctx?.sourceElement !== form) {
-            return;
-        }
-
-        const pageInput = document.getElementById("page-input");
-        const sortInput = document.getElementById("sort-input");
-
-        if (!pageInput || !sortInput) {
-            return;
-        }
-
-        const triggeringEvent = ctx.sourceEvent;
-        const submitter = ctx.request?.submitter || triggeringEvent?.submitter;
-        const target = triggeringEvent?.target;
-
-        const isPaginationButton = submitter?.name === "page";
-        const isSortButton = submitter?.name === "sort";
-        const isSearchInput = target?.matches?.("input[name='q']");
-
-        if (isPaginationButton) {
-            pageInput.value = submitter.value;
-            ctx.request.body.set("page", submitter.value);
-            return;
-        }
-
-        if (isSortButton) {
-            sortInput.value = submitter.value;
-            ctx.request.body.set("sort", submitter.value);
-        }
-
-        if (isSortButton || isSearchInput) {
-            pageInput.value = "1";
-            ctx.request.body.set("page", "1");
-        }
-    });
-</script>
+@section Scripts {
+    <script src="~/js/filters.js" asp-append-version="true"></script>
+}
