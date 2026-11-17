@@ -60,9 +60,12 @@
   </resheader>
 
   <data name="Nav_Home" xml:space="preserve"><value>Accueil</value></data>
-  <data name="Nav_AdminLinks" xml:space="preserve"><value>A : Liens</value></data>
-  <data name="Nav_AdminCategories" xml:space="preserve"><value>A : Catégories</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Administration</value></data>
+  <data name="Nav_PublicSite" xml:space="preserve"><value>Site public</value></data>
+  <data name="Nav_AdminLinks" xml:space="preserve"><value>Liens</value></data>
+  <data name="Nav_AdminCategories" xml:space="preserve"><value>Catégories</value></data>
 
+  <data name="Header_ToggleSidebar" xml:space="preserve"><value>Afficher/masquer le menu</value></data>
   <data name="Header_GitRepo" xml:space="preserve"><value>Dépôt Git</value></data>
   <data name="Header_RssFeed" xml:space="preserve"><value>Flux RSS</value></data>
   <data name="Header_ThemeToggle" xml:space="preserve"><value>Changer de thème</value></data>
@@ -162,8 +165,8 @@
   <data name="Field_RememberMe" xml:space="preserve"><value>Se souvenir de moi</value></data>
 
   <data name="Nav_Gallery" xml:space="preserve"><value>Galerie</value></data>
-  <data name="Nav_AdminGallery" xml:space="preserve"><value>A : Galerie</value></data>
-  <data name="Nav_AdminTags" xml:space="preserve"><value>A : Tags</value></data>
+  <data name="Nav_AdminGallery" xml:space="preserve"><value>Galerie</value></data>
+  <data name="Nav_AdminTags" xml:space="preserve"><value>Tags</value></data>
 
   <data name="Pagination_Gallery_Plural" xml:space="preserve"><value>médias</value></data>
   <data name="Pagination_Gallery_Singular" xml:space="preserve"><value>média</value></data>
