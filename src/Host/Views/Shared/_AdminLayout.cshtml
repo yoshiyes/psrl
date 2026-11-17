@@ -1,0 +1,440 @@
+@using System.Globalization
+@{
+    Layout = "_BaseLayout";
+
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+
+    bool IsActive(string controller, string? area = null)
+    {
+        return string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(currentArea ?? "", area ?? "", StringComparison.OrdinalIgnoreCase);
+    }
+
+    string SidebarLinkClass(string controller, string? area = null)
+    {
+        return IsActive(controller, area)
+            ? "group flex items-center gap-2 rounded-lg border border-orange-100 bg-orange-50 px-2.5 text-sm font-medium text-gray-900 dark:border-transparent dark:bg-gray-700/75 dark:text-white"
+            : "group flex items-center gap-2 rounded-lg border border-transparent px-2.5 text-sm font-medium text-gray-800 hover:bg-orange-50 hover:text-gray-900 active:border-orange-100 dark:text-gray-200 dark:hover:bg-gray-700/75 dark:hover:text-white dark:active:border-gray-600";
+    }
+
+    string SidebarIconClass(string controller, string? area = null)
+    {
+        return IsActive(controller, area)
+            ? "flex flex-none items-center text-orange-500 dark:text-gray-300"
+            : "flex flex-none items-center text-gray-400 group-hover:text-orange-500 dark:text-gray-500 dark:group-hover:text-gray-300";
+    }
+
+    var cultures = new[]
+    {
+        new { Code = "fr", Flag = "🇫🇷", Label = "Français" },
+        new { Code = "en", Flag = "🇬🇧", Label = "English" },
+    };
+    string currentCultureCode = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var currentCulture = cultures.FirstOrDefault(c => c.Code == currentCultureCode) ?? cultures[0];
+    var languageReturnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<div
+    id="page-container"
+    class="mx-auto flex min-h-dvh w-full min-w-80 flex-col bg-gray-100 lg:pl-64 dark:bg-gray-900 dark:text-gray-100">
+
+    <!-- Page Sidebar -->
+    <nav
+        id="page-sidebar"
+        class="fixed top-0 bottom-0 left-0 z-50 flex h-full w-full -translate-x-full flex-col border-r border-gray-200 bg-white transition-transform duration-500 ease-out lg:w-64 lg:translate-x-0 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-200"
+        aria-label="Main Sidebar Navigation">
+
+        <!-- Sidebar Header -->
+        <div class="flex h-16 w-full flex-none items-center justify-between px-4 lg:justify-center dark:bg-gray-600/25">
+            <!-- Brand -->
+            <a
+                asp-area="" asp-controller="Home" asp-action="Index"
+                class="group inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300">
+                <svg class="inline-block size-5 text-orange-600 transition group-hover:scale-110 dark:text-orange-400"
+                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M8 1a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 1ZM10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM12.95 4.11a.75.75 0 1 0-1.06-1.06l-1.062 1.06a.75.75 0 0 0 1.061 1.062l1.06-1.061ZM15 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 15 8ZM11.89 12.95a.75.75 0 0 0 1.06-1.06l-1.06-1.062a.75.75 0 0 0-1.062 1.061l1.061 1.06ZM8 12a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 12ZM5.172 11.89a.75.75 0 0 0-1.061-1.062L3.05 11.89a.75.75 0 1 0 1.06 1.06l1.06-1.06ZM4 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 4 8ZM4.11 5.172A.75.75 0 0 0 5.173 4.11L4.11 3.05a.75.75 0 1 0-1.06 1.06l1.06 1.06Z"/>
+                </svg>
+                <span>Passerelle</span>
+            </a>
+            <!-- END Brand -->
+
+            <!-- Close Sidebar on Mobile -->
+            <div class="lg:hidden">
+                <button
+                    type="button"
+                    onclick="closeMobileSidebar()"
+                    title="@L["Header_ToggleSidebar"]"
+                    aria-label="@L["Header_ToggleSidebar"]"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700">
+                    <svg class="hi-mini hi-x-mark -mx-0.5 inline-block size-5"
+                         xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 20 20"
+                         fill="currentColor"
+                         aria-hidden="true">
+                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- END Close Sidebar on Mobile -->
+        </div>
+        <!-- END Sidebar Header -->
+
+        <!-- Sidebar Navigation -->
+        <div class="overflow-y-auto">
+            <div class="w-full p-4">
+                <nav class="space-y-1">
+                    <!-- Section: Administration -->
+                    <div class="px-3 pb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
+                        @L["Nav_Admin"]
+                    </div>
+
+                    <a asp-area="Admin" asp-controller="Links" asp-action="Index"
+                       class="@SidebarLinkClass("Links", "Admin")">
+                        <span class="@SidebarIconClass("Links", "Admin")">
+                            <svg class="hi-outline hi-link inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_AdminLinks"]</span>
+                    </a>
+
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index"
+                       class="@SidebarLinkClass("Categories", "Admin")">
+                        <span class="@SidebarIconClass("Categories", "Admin")">
+                            <svg class="hi-outline hi-folder inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_AdminCategories"]</span>
+                    </a>
+
+                    <a asp-area="Admin" asp-controller="Gallery" asp-action="Index"
+                       class="@SidebarLinkClass("Gallery", "Admin")">
+                        <span class="@SidebarIconClass("Gallery", "Admin")">
+                            <svg class="hi-outline hi-photo inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_AdminGallery"]</span>
+                    </a>
+
+                    <a asp-area="Admin" asp-controller="GalleryTags" asp-action="Index"
+                       class="@SidebarLinkClass("GalleryTags", "Admin")">
+                        <span class="@SidebarIconClass("GalleryTags", "Admin")">
+                            <svg class="hi-outline hi-tag inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_AdminTags"]</span>
+                    </a>
+
+                    <!-- Section: Public Site -->
+                    <div class="px-3 pt-5 pb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
+                        @L["Nav_PublicSite"]
+                    </div>
+
+                    <a asp-area="" asp-controller="Home" asp-action="Index"
+                       class="@SidebarLinkClass("Home")">
+                        <span class="@SidebarIconClass("Home")">
+                            <svg class="hi-outline hi-home inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_Home"]</span>
+                    </a>
+
+                    <a asp-area="" asp-controller="Gallery" asp-action="Index"
+                       class="@SidebarLinkClass("Gallery")">
+                        <span class="@SidebarIconClass("Gallery")">
+                            <svg class="hi-outline hi-rectangle-stack inline-block size-5"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122"/>
+                            </svg>
+                        </span>
+                        <span class="grow py-2">@L["Nav_Gallery"]</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <!-- END Sidebar Navigation -->
+    </nav>
+    <!-- END Page Sidebar -->
+
+    <!-- Page Header -->
+    <header
+        id="page-header"
+        class="fixed top-0 right-0 left-0 z-30 flex h-16 flex-none items-center bg-white shadow-xs lg:pl-64 dark:bg-gray-800">
+        <div class="mx-auto flex w-full max-w-10xl justify-between px-4 lg:px-8">
+            <!-- Left Section -->
+            <div class="flex items-center gap-2">
+                <!-- Toggle Sidebar on Desktop -->
+                <div class="hidden lg:block">
+                    <button
+                        type="button"
+                        onclick="toggleDesktopSidebar()"
+                        title="@L["Header_ToggleSidebar"]"
+                        aria-label="@L["Header_ToggleSidebar"]"
+                        class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700">
+                        <svg class="hi-solid hi-menu-alt-1 inline-block size-5"
+                             fill="currentColor"
+                             viewBox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- END Toggle Sidebar on Desktop -->
+
+                <!-- Toggle Sidebar on Mobile -->
+                <div class="lg:hidden">
+                    <button
+                        type="button"
+                        onclick="toggleMobileSidebar()"
+                        title="@L["Header_ToggleSidebar"]"
+                        aria-label="@L["Header_ToggleSidebar"]"
+                        class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700">
+                        <svg class="hi-solid hi-menu-alt-1 inline-block size-5"
+                             fill="currentColor"
+                             viewBox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- END Toggle Sidebar on Mobile -->
+            </div>
+            <!-- END Left Section -->
+
+            <!-- Center Section (Mobile Brand) -->
+            <div class="flex items-center lg:hidden">
+                <a
+                    asp-area="" asp-controller="Home" asp-action="Index"
+                    class="group inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300">
+                    <svg class="inline-block size-5 text-orange-600 transition group-hover:scale-110 dark:text-orange-400"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path d="M8 1a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 1ZM10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM12.95 4.11a.75.75 0 1 0-1.06-1.06l-1.062 1.06a.75.75 0 0 0 1.061 1.062l1.06-1.061ZM15 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 15 8ZM11.89 12.95a.75.75 0 0 0 1.06-1.06l-1.06-1.062a.75.75 0 0 0-1.062 1.061l1.061 1.06ZM8 12a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 12ZM5.172 11.89a.75.75 0 0 0-1.061-1.062L3.05 11.89a.75.75 0 1 0 1.06 1.06l1.06-1.06ZM4 8a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 4 8ZM4.11 5.172A.75.75 0 0 0 5.173 4.11L4.11 3.05a.75.75 0 1 0-1.06 1.06l1.06 1.06Z"/>
+                    </svg>
+                    <span class="hidden sm:inline">Passerelle</span>
+                </a>
+            </div>
+            <!-- END Center Section -->
+
+            <!-- Right Section -->
+            <div class="flex items-center gap-2">
+                <!-- Language Switcher -->
+                <details id="lang-switcher" class="group relative">
+                    <summary
+                        title="@L["Header_Language"]"
+                        aria-label="@L["Header_Language"]"
+                        aria-haspopup="menu"
+                        class="inline-flex cursor-pointer list-none items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700 [&::-webkit-details-marker]:hidden">
+                        <span class="inline-flex size-5 items-center justify-center text-base leading-none">@currentCulture.Flag</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                             class="inline-block size-5 opacity-50 transition group-open:rotate-180">
+                            <path fill-rule="evenodd"
+                                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </summary>
+                    <div class="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-lg shadow-xl dark:shadow-gray-900">
+                        <div role="menu"
+                             aria-label="@L["Header_Language"]"
+                             class="divide-y divide-gray-100 rounded-lg bg-white ring-1 ring-black/5 dark:divide-gray-700 dark:bg-gray-800 dark:ring-gray-700">
+                            <div class="space-y-1 p-2.5">
+                                @foreach (var culture in cultures)
+                                {
+                                    <form method="post" action="/Culture/Set">
+                                        <input type="hidden" name="culture" value="@culture.Code"/>
+                                        <input type="hidden" name="returnUrl" value="@languageReturnUrl"/>
+                                        <button
+                                            type="submit"
+                                            role="menuitem"
+                                            class="group flex w-full items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-800 active:border-orange-100 dark:text-gray-200 dark:hover:bg-gray-700/75 dark:hover:text-white dark:active:border-gray-600">
+                                            <span class="text-base leading-none">@culture.Flag</span>
+                                            <span class="grow">@culture.Label</span>
+                                            @if (culture.Code == currentCultureCode)
+                                            {
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                     fill="currentColor"
+                                                     class="inline-block size-4 flex-none text-orange-500 dark:text-orange-400">
+                                                    <path fill-rule="evenodd"
+                                                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                                                          clip-rule="evenodd"/>
+                                                </svg>
+                                            }
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Theme Toggle -->
+                <button
+                    type="button"
+                    onclick="setTheme()"
+                    title="@L["Header_ThemeToggle"]"
+                    aria-label="@L["Header_ThemeToggle"]"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                         class="hi-micro hi-moon inline-block size-5">
+                        <path d="M14.438 10.148c.19-.425-.321-.787-.748-.601A5.5 5.5 0 0 1 6.453 2.31c.186-.427-.176-.938-.6-.748a6.501 6.501 0 1 0 8.585 8.586Z"/>
+                    </svg>
+                </button>
+
+                <!-- Logout -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-lg border border-orange-700 bg-orange-700 px-3 py-2 text-sm leading-5 font-semibold text-white hover:border-orange-600 hover:bg-orange-600 hover:text-white focus:ring-3 focus:ring-orange-400/50 active:border-orange-700 active:bg-orange-700 dark:focus:ring-orange-400/90">
+                            @L["Header_Logout"]
+                        </button>
+                    </form>
+                }
+            </div>
+            <!-- END Right Section -->
+        </div>
+    </header>
+    <!-- END Page Header -->
+
+    <!-- Page Content -->
+    <main id="page-content" class="flex max-w-full flex-auto flex-col pt-16">
+        <!-- Page Section -->
+        <div class="mx-auto w-full max-w-10xl p-4 lg:p-8">
+            <!-- Page Heading -->
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="grow">
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">@(ViewData["Title"])</h1>
+                </div>
+                @await RenderSectionAsync("PageActions", required: false)
+            </div>
+
+            @RenderBody()
+        </div>
+        <!-- END Page Section -->
+    </main>
+    <!-- END Page Content -->
+
+    @await Html.PartialAsync("_Footer")
+</div>
+<!-- END Page Container -->
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<script>
+    (() => {
+        const isDark =
+            localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', isDark);
+    })();
+
+    let desktopSidebarOpen = true;
+    let mobileSidebarOpen = false;
+
+    function syncSidebarClasses() {
+        const container = document.getElementById('page-container');
+        const sidebar = document.getElementById('page-sidebar');
+        const header = document.getElementById('page-header');
+
+        if (!container || !sidebar || !header) return;
+
+        container.classList.toggle('lg:pl-64', desktopSidebarOpen);
+        header.classList.toggle('lg:pl-64', desktopSidebarOpen);
+
+        sidebar.classList.toggle('lg:translate-x-0', desktopSidebarOpen);
+        sidebar.classList.toggle('lg:-translate-x-full', !desktopSidebarOpen);
+
+        sidebar.classList.toggle('translate-x-0', mobileSidebarOpen);
+        sidebar.classList.toggle('-translate-x-full', !mobileSidebarOpen);
+    }
+
+    function toggleDesktopSidebar() {
+        desktopSidebarOpen = !desktopSidebarOpen;
+        syncSidebarClasses();
+    }
+
+    function toggleMobileSidebar() {
+        mobileSidebarOpen = !mobileSidebarOpen;
+        syncSidebarClasses();
+    }
+
+    function closeMobileSidebar() {
+        mobileSidebarOpen = false;
+        syncSidebarClasses();
+    }
+
+    function setTheme() {
+        const root = document.documentElement;
+        const isDark = root.classList.contains('dark');
+
+        root.classList.toggle('dark', !isDark);
+        localStorage.theme = isDark ? 'light' : 'dark';
+    }
+
+    document.addEventListener('click', (event) => {
+        const details = document.getElementById('lang-switcher');
+        if (details && details.open && !details.contains(event.target)) {
+            details.open = false;
+        }
+    });
+</script>

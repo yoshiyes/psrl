@@ -1,10 +1,14 @@
 @using System.Globalization
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
 
-    string NavClass(string controller)
+    string NavClass(string controller, string? area = null)
     {
-        return currentController == controller
+        var isMatch = currentController == controller &&
+                      string.Equals(currentArea ?? "", area ?? "", StringComparison.OrdinalIgnoreCase);
+
+        return isMatch
             ? "group flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-sm font-medium text-white"
             : "group flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-gray-200 hover:bg-gray-700 hover:text-white";
     }
@@ -27,7 +31,7 @@
         <div class="flex justify-between py-4">
             <div class="flex items-center gap-2 lg:gap-6">
                 <a
-                    asp-controller="Home" asp-action="Index"
+                    asp-area="" asp-controller="Home" asp-action="Index"
                     class="group inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-100 hover:text-gray-300">
 
                     <svg class="inline-block size-5 text-orange-400 transition group-hover:scale-110"
@@ -37,19 +41,20 @@
                     </svg>
                     <span>Passerelle</span>
                 </a>
-                <nav class="hidden items-center gap-2 lg:flex">
-                    <a asp-controller="Home" asp-action="Index"
-                       class="@NavClass("Home")"
-                    >@L["Nav_Home"]</a>
+                <nav class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <a asp-area="" asp-controller="Home" asp-action="Index"
+                       class="@NavClass("Home")">
+                        @L["Nav_Home"]
+                    </a>
+                    <a asp-area="" asp-controller="Gallery" asp-action="Index"
+                       class="@NavClass("Gallery")">
+                        <span>@L["Nav_Gallery"]</span>
+                    </a>
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <a asp-area="Admin" asp-controller="Links" asp-action="Index"
-                           class="@NavClass("Links")">
-                            <span>@L["Nav_AdminLinks"]</span>
-                        </a>
-                        <a asp-area="Admin" asp-controller="Categories" asp-action="Index"
-                           class="@NavClass("Categories")">
-                            <span>@L["Nav_AdminCategories"]</span>
+                           class="@NavClass("Links", "Admin")">
+                            <span>@L["Nav_Admin"]</span>
                         </a>
                     }
                 </nav>

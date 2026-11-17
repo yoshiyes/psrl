@@ -257,6 +257,177 @@ namespace Passerelle.Host.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Aperture")
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("CameraMake")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("CameraModel")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Instant>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1200)
+                        .HasColumnType("character varying(1200)");
+
+                    b.Property<long>("FileSizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FocalLength")
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Iso")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("LensModel")
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<int>("LocationMode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LocationName")
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
+                    b.Property<string>("PreviewFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComputedColumnSql("setweight(to_tsvector('unaccent_simple', coalesce(\"Title\", '')), 'A') || setweight(to_tsvector('unaccent_simple', coalesce(\"Description\", '')), 'B') || setweight(to_tsvector('unaccent_simple', coalesce(\"LocationName\", '') || ' ' || coalesce(\"CameraMake\", '') || ' ' || coalesce(\"CameraModel\", '')), 'C')", true);
+
+                    b.Property<string>("ShutterSpeed")
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<Instant?>("TakenAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ThumbnailFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<Instant>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SearchVector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
+
+                    b.ToTable("GalleryItems");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItemTag", b =>
+                {
+                    b.Property<Guid>("GalleryItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ImageTagId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Instant>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("GalleryItemId", "ImageTagId");
+
+                    b.HasIndex("ImageTagId");
+
+                    b.ToTable("GalleryItemTags");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.ImageTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Instant>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Emoji")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<Instant>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("ImageTags");
+                });
+
             modelBuilder.Entity("Passerelle.Domain.Entities.Link", b =>
                 {
                     b.Property<Guid>("Id")
@@ -367,6 +538,25 @@ namespace Passerelle.Host.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItemTag", b =>
+                {
+                    b.HasOne("Passerelle.Domain.Entities.GalleryItem", "GalleryItem")
+                        .WithMany("GalleryItemTags")
+                        .HasForeignKey("GalleryItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Passerelle.Domain.Entities.ImageTag", "ImageTag")
+                        .WithMany("GalleryItemTags")
+                        .HasForeignKey("ImageTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GalleryItem");
+
+                    b.Navigation("ImageTag");
+                });
+
             modelBuilder.Entity("Passerelle.Domain.Entities.LinkCategory", b =>
                 {
                     b.HasOne("Passerelle.Domain.Entities.Category", "Category")
@@ -389,6 +579,16 @@ namespace Passerelle.Host.Migrations
             modelBuilder.Entity("Passerelle.Domain.Entities.Category", b =>
                 {
                     b.Navigation("LinkCategories");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItem", b =>
+                {
+                    b.Navigation("GalleryItemTags");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.ImageTag", b =>
+                {
+                    b.Navigation("GalleryItemTags");
                 });
 
             modelBuilder.Entity("Passerelle.Domain.Entities.Link", b =>
