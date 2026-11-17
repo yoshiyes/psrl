@@ -81,14 +81,14 @@
                 </div>
             </div>
 
-            <!-- Type Filter (All / Image / Photo) -->
+            <!-- Type Filter (All / Drawing / Photo) -->
             <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
                 @{
                     string currentType = Model.SelectedType ?? "";
                     var typeOptions = new[]
                     {
                         new { Value = "", Label = L["Gallery_Filter_TypeAll"].Value, Icon = "🖼️" },
-                        new { Value = "image", Label = L["Gallery_Type_Image"].Value, Icon = "🎨" },
+                        new { Value = "drawing", Label = L["Gallery_Type_Drawing"].Value, Icon = "🎨" },
                         new { Value = "photo", Label = L["Gallery_Type_Photo"].Value, Icon = "📷" }
                     };
                 }

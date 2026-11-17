@@ -11,7 +11,7 @@ public class GalleryItem : AuditableEntity
 
     [StringLength(1200)] public string Description { get; set; } = string.Empty;
 
-    public GalleryItemType Type { get; set; } = GalleryItemType.Image;
+    public GalleryItemType Type { get; set; } = GalleryItemType.Drawing;
 
     [Required] [StringLength(260)] public string OriginalFileName { get; set; } = string.Empty;
 

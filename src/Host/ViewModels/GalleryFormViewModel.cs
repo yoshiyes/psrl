@@ -20,7 +20,7 @@ public sealed class GalleryFormViewModel
     public string? Description { get; set; }
 
     [Display(Name = "Gallery_Field_Type")]
-    public GalleryItemType Type { get; set; } = GalleryItemType.Image;
+    public GalleryItemType Type { get; set; } = GalleryItemType.Drawing;
 
     [Display(Name = "Gallery_Field_LocationMode")]
     public GalleryLocationMode LocationMode { get; set; } = GalleryLocationMode.Original;

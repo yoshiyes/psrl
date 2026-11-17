@@ -170,12 +170,12 @@
   <data name="Pagination_Tags_Plural" xml:space="preserve"><value>tags</value></data>
   <data name="Pagination_Tags_Singular" xml:space="preserve"><value>tag</value></data>
 
-  <data name="Gallery_Title" xml:space="preserve"><value>Image &amp; Photo Gallery</value></data>
-  <data name="Gallery_SearchPlaceholder" xml:space="preserve"><value>Search an image, description, location or camera</value></data>
+  <data name="Gallery_Title" xml:space="preserve"><value>Photo &amp; Drawing Gallery</value></data>
+  <data name="Gallery_SearchPlaceholder" xml:space="preserve"><value>Search a photo, drawing, description, location or camera</value></data>
   <data name="Gallery_Filter_TypeAll" xml:space="preserve"><value>All types</value></data>
-  <data name="Gallery_Type_Image" xml:space="preserve"><value>Image</value></data>
+  <data name="Gallery_Type_Drawing" xml:space="preserve"><value>Drawing</value></data>
   <data name="Gallery_Type_Photo" xml:space="preserve"><value>Photo</value></data>
-  <data name="Gallery_Empty" xml:space="preserve"><value>No image or photo found.</value></data>
+  <data name="Gallery_Empty" xml:space="preserve"><value>No drawing or photo found.</value></data>
   <data name="Gallery_PreviewAction" xml:space="preserve"><value>Quick preview</value></data>
   <data name="Gallery_ViewDetails" xml:space="preserve"><value>Details</value></data>
   <data name="Gallery_ViewAllInfo" xml:space="preserve"><value>View all information</value></data>
@@ -202,12 +202,12 @@
   <data name="Gallery_Info_Dimensions" xml:space="preserve"><value>Dimensions</value></data>
   <data name="Gallery_Info_FileSize" xml:space="preserve"><value>File size</value></data>
 
-  <data name="Gallery_Field_File" xml:space="preserve"><value>Image / photo file</value></data>
+  <data name="Gallery_Field_File" xml:space="preserve"><value>Photo / drawing file</value></data>
   <data name="Gallery_Field_ReplaceFile" xml:space="preserve"><value>Replace file (optional)</value></data>
   <data name="Gallery_Field_Type" xml:space="preserve"><value>Type</value></data>
   <data name="Gallery_Field_TitleOptional" xml:space="preserve"><value>Title (optional)</value></data>
   <data name="Gallery_Field_TitlePlaceholder" xml:space="preserve"><value>Leave blank to use file name</value></data>
-  <data name="Gallery_Field_DescriptionPlaceholder" xml:space="preserve"><value>Add a description for this image or photo...</value></data>
+  <data name="Gallery_Field_DescriptionPlaceholder" xml:space="preserve"><value>Add a description for this drawing or photo...</value></data>
   <data name="Gallery_Photo_LocationSettings" xml:space="preserve"><value>Photo location &amp; privacy settings</value></data>
   <data name="Gallery_Field_LocationMode" xml:space="preserve"><value>Location handling (EXIF metadata &amp; display)</value></data>
   <data name="Gallery_LocationMode_Original" xml:space="preserve"><value>Keep original EXIF location</value></data>
@@ -222,7 +222,7 @@
   <data name="Gallery_Field_NewTagsHelp" xml:space="preserve"><value>Separate new tags with a comma. You can prefix a tag with an emoji followed by a space.</value></data>
 
   <data name="Admin_Gallery_Title" xml:space="preserve"><value>Gallery administration</value></data>
-  <data name="Admin_Gallery_New" xml:space="preserve"><value>Upload image / photo</value></data>
+  <data name="Admin_Gallery_New" xml:space="preserve"><value>Upload photo / drawing</value></data>
   <data name="Admin_Gallery_FilterAllTags" xml:space="preserve"><value>All tags</value></data>
   <data name="Admin_Gallery_Column_Preview" xml:space="preserve"><value>Preview</value></data>
   <data name="Admin_Gallery_LocationOriginal" xml:space="preserve"><value>Original EXIF</value></data>

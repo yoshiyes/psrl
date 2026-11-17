@@ -2,6 +2,6 @@ namespace Passerelle.Domain.Entities;
 
 public enum GalleryItemType
 {
-    Image = 0,
+    Drawing = 0,
     Photo = 1
 }

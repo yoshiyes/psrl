@@ -342,7 +342,7 @@ public sealed class GalleryController(
 
         return value.Trim().ToLowerInvariant() switch
         {
-            "image" => GalleryItemType.Image,
+            "drawing" or "dessin" => GalleryItemType.Drawing,
             "photo" => GalleryItemType.Photo,
             _ => null
         };
