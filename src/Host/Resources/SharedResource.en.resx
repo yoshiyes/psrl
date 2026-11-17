@@ -223,15 +223,14 @@
 
   <data name="Admin_Gallery_Title" xml:space="preserve"><value>Gallery administration</value></data>
   <data name="Admin_Gallery_New" xml:space="preserve"><value>Upload image / photo</value></data>
-  <data name="Admin_Gallery_SelectAction" xml:space="preserve"><value>Select an action to upload or edit an image or photo.</value></data>
   <data name="Admin_Gallery_FilterAllTags" xml:space="preserve"><value>All tags</value></data>
   <data name="Admin_Gallery_Column_Preview" xml:space="preserve"><value>Preview</value></data>
   <data name="Admin_Gallery_LocationOriginal" xml:space="preserve"><value>Original EXIF</value></data>
   <data name="Admin_Gallery_LocationOverridden" xml:space="preserve"><value>Rewritten location</value></data>
   <data name="Admin_Gallery_LocationHidden" xml:space="preserve"><value>Hidden location</value></data>
-  <data name="Admin_Gallery_DeleteConfirm" xml:space="preserve"><value>Delete this image / photo ?</value></data>
-  <data name="Admin_GalleryForm_CreateTitle" xml:space="preserve"><value>Upload an image or photo</value></data>
-  <data name="Admin_GalleryForm_EditTitle" xml:space="preserve"><value>Edit image or photo</value></data>
+  <data name="Admin_Gallery_DeleteConfirm" xml:space="preserve"><value>Delete this image ?</value></data>
+  <data name="Admin_GalleryForm_CreateTitle" xml:space="preserve"><value>Upload an image</value></data>
+  <data name="Admin_GalleryForm_EditTitle" xml:space="preserve"><value>Edit image</value></data>
 
   <data name="Admin_Tags_Title" xml:space="preserve"><value>Image tags administration</value></data>
   <data name="Admin_Tags_New" xml:space="preserve"><value>New tag</value></data>

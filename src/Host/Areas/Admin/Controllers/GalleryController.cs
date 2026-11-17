@@ -72,12 +72,6 @@ public sealed class GalleryController(
         });
     }
 
-    [HttpGet("cancel")]
-    public IActionResult Cancel()
-    {
-        return PartialView("_GalleryFormPlaceholder");
-    }
-
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
     [RequestSizeLimit(52_428_800)] // 50 MB max upload

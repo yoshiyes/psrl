@@ -223,15 +223,14 @@
 
   <data name="Admin_Gallery_Title" xml:space="preserve"><value>Administration de la galerie</value></data>
   <data name="Admin_Gallery_New" xml:space="preserve"><value>Ajouter une image / photo</value></data>
-  <data name="Admin_Gallery_SelectAction" xml:space="preserve"><value>Sélectionnez une action pour ajouter ou modifier une image ou photo.</value></data>
   <data name="Admin_Gallery_FilterAllTags" xml:space="preserve"><value>Tous les tags</value></data>
   <data name="Admin_Gallery_Column_Preview" xml:space="preserve"><value>Aperçu</value></data>
   <data name="Admin_Gallery_LocationOriginal" xml:space="preserve"><value>EXIF d’origine</value></data>
   <data name="Admin_Gallery_LocationOverridden" xml:space="preserve"><value>Localisation réécrite</value></data>
   <data name="Admin_Gallery_LocationHidden" xml:space="preserve"><value>Localisation masquée</value></data>
-  <data name="Admin_Gallery_DeleteConfirm" xml:space="preserve"><value>Supprimer cette image / photo ?</value></data>
-  <data name="Admin_GalleryForm_CreateTitle" xml:space="preserve"><value>Uploader une image ou photo</value></data>
-  <data name="Admin_GalleryForm_EditTitle" xml:space="preserve"><value>Modifier l’image ou photo</value></data>
+  <data name="Admin_Gallery_DeleteConfirm" xml:space="preserve"><value>Supprimer cette image ?</value></data>
+  <data name="Admin_GalleryForm_CreateTitle" xml:space="preserve"><value>Téléverser une image</value></data>
+  <data name="Admin_GalleryForm_EditTitle" xml:space="preserve"><value>Modifier l’image</value></data>
 
   <data name="Admin_Tags_Title" xml:space="preserve"><value>Administration des tags d’images</value></data>
   <data name="Admin_Tags_New" xml:space="preserve"><value>Nouveau tag</value></data>
