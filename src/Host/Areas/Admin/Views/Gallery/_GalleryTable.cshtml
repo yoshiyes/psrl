@@ -1,0 +1,155 @@
+@using Passerelle.Domain.Entities
+@model Passerelle.Host.ViewModels.AdminGalleryIndexViewModel
+
+<div class="min-w-full overflow-x-auto rounded-sm bg-white dark:border-gray-700 dark:bg-gray-800">
+    <table class="min-w-full align-middle text-sm whitespace-nowrap">
+        <thead>
+        <tr>
+            <th class="border-b-2 border-gray-200/50 pr-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Admin_Gallery_Column_Preview"]
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_Name"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "title",
+                        Label = L["Sort_Label_Name"].Value,
+                        FormId = "admin-gallery-filters-form"
+                    })
+                </div>
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Gallery_Field_Type"]
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Gallery_Tags"]
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-left font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                <div class="inline-flex items-center gap-2">
+                    <span>@L["Links_Column_KeyDates"]</span>
+                    @await Html.PartialAsync("_SortButton", new Passerelle.Host.ViewModels.SortButtonViewModel
+                    {
+                        CurrentSort = Model.Sort,
+                        SortKey = "date",
+                        Label = L["Sort_Label_Date"].Value,
+                        FormId = "admin-gallery-filters-form"
+                    })
+                </div>
+            </th>
+            <th class="border-b-2 border-gray-200/50 px-3 pb-4 text-right font-semibold text-gray-900 dark:border-gray-700 dark:text-gray-50">
+                @L["Links_Column_Actions"]
+            </th>
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+        @if (Model.Items.Count == 0)
+        {
+            <tr>
+                <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    @L["Gallery_Empty"]
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (GalleryItem item in Model.Items)
+            {
+                bool isPhoto = item.Type == GalleryItemType.Photo;
+                <tr>
+                    <td class="py-3 pr-3">
+                        <a href="/gallery/@item.Id" class="block h-14 w-20 overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-900">
+                            <img src="/gallery/media/@item.Id/thumb"
+                                 alt="@item.Title"
+                                 loading="lazy"
+                                 class="h-full w-full object-cover"/>
+                        </a>
+                    </td>
+
+                    <td class="max-w-xs p-3 whitespace-normal">
+                        <a href="/gallery/@item.Id"
+                           class="font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300">
+                            @(string.IsNullOrWhiteSpace(item.Title) ? item.OriginalFileName : item.Title)
+                        </a>
+                        @if (!string.IsNullOrWhiteSpace(item.Description))
+                        {
+                            <div class="mt-0.5 line-clamp-2 text-xs text-gray-500 dark:text-gray-400">@item.Description</div>
+                        }
+                        <div class="mt-1 text-[11px] text-gray-400 dark:text-gray-500">
+                            @(item.Width) × @(item.Height) px
+                        </div>
+                    </td>
+
+                    <td class="p-3">
+                        <div class="space-y-1">
+                            @if (isPhoto)
+                            {
+                                <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                                    📷 @L["Gallery_Type_Photo"]
+                                </span>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    @switch (item.LocationMode)
+                                    {
+                                        case GalleryLocationMode.Hidden:
+                                            <span>🔒 @L["Admin_Gallery_LocationHidden"]</span>
+                                            break;
+                                        case GalleryLocationMode.Overridden:
+                                            <span>✏️ @L["Admin_Gallery_LocationOverridden"]</span>
+                                            break;
+                                        default:
+                                            <span>📍 @L["Admin_Gallery_LocationOriginal"]</span>
+                                            break;
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="inline-flex items-center gap-1 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-800 dark:bg-sky-900/40 dark:text-sky-300">
+                                    🎨 @L["Gallery_Type_Image"]
+                                </span>
+                            }
+                        </div>
+                    </td>
+
+                    <td class="p-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach (ImageTag tag in item.GalleryItemTags.Select(x => x.ImageTag))
+                            {
+                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-200 px-2 py-0.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
+                                    @if (!string.IsNullOrWhiteSpace(tag.Emoji))
+                                    {
+                                        <span aria-hidden="true">@tag.Emoji</span>
+                                    }
+                                    @tag.Name
+                                </span>
+                            }
+                        </div>
+                    </td>
+
+                    <td class="p-3 text-xs text-gray-500 dark:text-gray-400">
+                        @item.CreatedAt.ToDateTimeUtc().ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td class="p-3">
+                        <div class="flex justify-end gap-2">
+                            <a href="/admin/gallery/edit/@item.Id"
+                               class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700">
+                                @L["Admin_Common_Edit"]
+                            </a>
+
+                            <form hx-post="/admin/gallery/delete/@item.Id" hx-confirm="@L["Admin_Gallery_DeleteConfirm"]">
+                                @Html.AntiForgeryToken()
+                                <button class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-900/40 dark:text-red-400 dark:hover:bg-red-900/20">
+                                    @L["Admin_Common_Delete"]
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

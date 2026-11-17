@@ -12,5 +12,8 @@ public sealed class SqliteApplicationDbContext(DbContextOptions<SqliteApplicatio
 
         modelBuilder.Entity<Link>()
             .Ignore(c => c.SearchVector);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Ignore(g => g.SearchVector);
     }
 }

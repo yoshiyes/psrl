@@ -22,6 +22,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" />
         <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="SixLabors.ImageSharp" />
         <PackageReference Include="System.ServiceModel.Syndication" />
     </ItemGroup>
     <ItemGroup>

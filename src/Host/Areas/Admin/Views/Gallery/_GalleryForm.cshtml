@@ -1,0 +1,260 @@
+@using Passerelle.Domain.Entities
+@model Passerelle.Host.ViewModels.GalleryFormViewModel
+
+@{
+    bool isEdit = Model.Id.HasValue && Model.Id != Guid.Empty;
+    string postUrl = isEdit ? $"/admin/gallery/edit/{Model.Id}" : "/admin/gallery/create";
+    bool isPhoto = Model.Type == GalleryItemType.Photo;
+    bool isLocationHidden = Model.LocationMode == GalleryLocationMode.Hidden;
+    bool isLocationOverridden = Model.LocationMode == GalleryLocationMode.Overridden;
+}
+
+<div class="relative overflow-hidden rounded-lg border border-gray-200 bg-white p-5 shadow-xs dark:border-gray-700 dark:bg-gray-800">
+    <!-- Loading Overlay during form submission -->
+    <div id="gallery-form-loader"
+         class="gallery-form-loading htmx-indicator absolute inset-0 z-20 flex flex-col items-center justify-center gap-2 bg-white/75 backdrop-blur-xs dark:bg-gray-900/75"
+         aria-hidden="true">
+        <svg class="size-8 animate-spin text-orange-500"
+             xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="1.5"
+             stroke="currentColor">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.992 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+        </svg>
+    </div>
+
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+        @(isEdit ? L["Admin_GalleryForm_EditTitle"] : L["Admin_GalleryForm_CreateTitle"])
+    </h2>
+
+    <form id="gallery-item-form"
+          method="post"
+          action="@postUrl"
+          enctype="multipart/form-data"
+          hx-post="@postUrl"
+          hx-encoding="multipart/form-data"
+          hx-target="#gallery-form-container"
+          hx-swap="innerHTML"
+          hx-indicator="#gallery-form-loader, #gallery-submit-spinner"
+          onsubmit="document.getElementById('gallery-submit-spinner')?.classList.remove('hidden'); document.getElementById('gallery-form-loader')?.classList.add('is-submitting');"
+          class="mt-4 space-y-5">
+        @Html.AntiForgeryToken()
+
+        <div class="grid gap-4 sm:grid-cols-2">
+            <!-- File Upload -->
+            <div>
+                <label asp-for="ImageFile" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    @(isEdit ? L["Gallery_Field_ReplaceFile"] : L["Gallery_Field_File"])
+                </label>
+                <input asp-for="ImageFile"
+                       type="file"
+                       accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.tiff"
+                       class="block w-full text-sm text-gray-700 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-orange-700 hover:file:bg-orange-100 dark:text-gray-300 dark:file:bg-orange-900/30 dark:file:text-orange-300"/>
+                <span asp-validation-for="ImageFile" class="text-sm text-rose-600 dark:text-rose-400"></span>
+            </div>
+
+            <!-- Type (Image / Photo) -->
+            <div>
+                <label asp-for="Type" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    @L["Gallery_Field_Type"]
+                </label>
+                <select asp-for="Type"
+                        id="gallery-type-select"
+                        onchange="toggleGalleryPhotoOptions()"
+                        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500">
+                    <option value="@GalleryItemType.Image">🎨 @L["Gallery_Type_Image"]</option>
+                    <option value="@GalleryItemType.Photo">📷 @L["Gallery_Type_Photo"]</option>
+                </select>
+                <span asp-validation-for="Type" class="text-sm text-rose-600 dark:text-rose-400"></span>
+            </div>
+        </div>
+
+        <!-- Title (optional) -->
+        <div>
+            <label asp-for="Title" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                @L["Gallery_Field_TitleOptional"]
+            </label>
+            <input asp-for="Title"
+                   placeholder="@L["Gallery_Field_TitlePlaceholder"]"
+                   class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"/>
+            <span asp-validation-for="Title" class="text-sm text-rose-600 dark:text-rose-400"></span>
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label asp-for="Description" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                @L["Field_Description"]
+            </label>
+            <textarea asp-for="Description"
+                      rows="3"
+                      placeholder="@L["Gallery_Field_DescriptionPlaceholder"]"
+                      class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"></textarea>
+            <span asp-validation-for="Description" class="text-sm text-rose-600 dark:text-rose-400"></span>
+        </div>
+
+        <!-- Photo Location Metadata Options (Visible when Type == Photo) -->
+        <div id="photo-location-section"
+             class="space-y-4 rounded-lg border border-amber-200 bg-amber-50/50 p-4 dark:border-amber-900/40 dark:bg-amber-950/20 @(isPhoto ? "" : "hidden")">
+            <div class="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-300">
+                <span aria-hidden="true">📍</span>
+                <span>@L["Gallery_Photo_LocationSettings"]</span>
+            </div>
+
+            <div>
+                <label asp-for="LocationMode" class="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                    @L["Gallery_Field_LocationMode"]
+                </label>
+                <select asp-for="LocationMode"
+                        id="gallery-location-mode-select"
+                        onchange="toggleGalleryPhotoOptions()"
+                        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500">
+                    <option value="@GalleryLocationMode.Original">@L["Gallery_LocationMode_Original"]</option>
+                    <option value="@GalleryLocationMode.Overridden">@L["Gallery_LocationMode_Overridden"]</option>
+                    <option value="@GalleryLocationMode.Hidden">@L["Gallery_LocationMode_Hidden"]</option>
+                </select>
+            </div>
+
+            <div id="photo-location-name-group" class="@(isLocationHidden ? "hidden" : "")">
+                <label asp-for="LocationName" class="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                    @L["Gallery_Field_LocationName"]
+                </label>
+                <input asp-for="LocationName"
+                       placeholder="@L["Gallery_Field_LocationNamePlaceholder"]"
+                       class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"/>
+                <span asp-validation-for="LocationName" class="text-sm text-rose-600 dark:text-rose-400"></span>
+            </div>
+
+            <div id="photo-location-coords-group" class="grid gap-3 sm:grid-cols-2 @(isLocationOverridden ? "" : "hidden")">
+                <div>
+                    <label asp-for="Latitude" class="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                        @L["Gallery_Field_Latitude"]
+                    </label>
+                    <input asp-for="Latitude"
+                           type="number"
+                           step="any"
+                           placeholder="48.8566"
+                           class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"/>
+                    <span asp-validation-for="Latitude" class="text-sm text-rose-600 dark:text-rose-400"></span>
+                </div>
+                <div>
+                    <label asp-for="Longitude" class="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+                        @L["Gallery_Field_Longitude"]
+                    </label>
+                    <input asp-for="Longitude"
+                           type="number"
+                           step="any"
+                           placeholder="2.3522"
+                           class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"/>
+                    <span asp-validation-for="Longitude" class="text-sm text-rose-600 dark:text-rose-400"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Existing & New Tags -->
+        <div class="space-y-3">
+            <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                @L["Gallery_Tags"]
+            </span>
+
+            @if (Model.AvailableTags.Count > 0)
+            {
+                <div class="grid gap-2 sm:grid-cols-3">
+                    @foreach (ImageTag tag in Model.AvailableTags)
+                    {
+                        <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:border-orange-400 dark:border-gray-700 dark:text-gray-300">
+                            <input type="checkbox"
+                                   name="SelectedTagIds"
+                                   value="@tag.Id"
+                                   @(Model.SelectedTagIds.Contains(tag.Id) ? "checked" : null)/>
+                            <span>
+                                @if (!string.IsNullOrWhiteSpace(tag.Emoji))
+                                {
+                                    <span class="mr-1" aria-hidden="true">@tag.Emoji</span>
+                                }
+                                @tag.Name
+                            </span>
+                        </label>
+                    }
+                </div>
+            }
+
+            <div>
+                <label asp-for="NewTags" class="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
+                    @L["Gallery_Field_NewTags"]
+                </label>
+                <input asp-for="NewTags"
+                       placeholder="@L["Gallery_Field_NewTagsPlaceholder"]"
+                       class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm placeholder-gray-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-orange-500"/>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">@L["Gallery_Field_NewTagsHelp"]</p>
+                <span asp-validation-for="NewTags" class="text-sm text-rose-600 dark:text-rose-400"></span>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2">
+            <a asp-area="Admin" asp-controller="Gallery" asp-action="Index"
+               class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600">
+                @L["Admin_Common_Cancel"]
+            </a>
+
+            <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-orange-700 bg-orange-700 px-5 py-2 text-sm leading-5 font-semibold text-white hover:border-orange-600 hover:bg-orange-600 focus:ring-3 focus:ring-orange-400/90 active:border-orange-700 active:bg-orange-700">
+                <svg id="gallery-submit-spinner"
+                     class="htmx-indicator hidden size-4 animate-spin text-white"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>@L["Admin_LinkForm_Save"]</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .gallery-form-loading.htmx-indicator {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 200ms ease-in-out, visibility 200ms ease-in-out;
+    }
+
+    .htmx-request.gallery-form-loading,
+    .htmx-request .gallery-form-loading,
+    .gallery-form-loading.is-submitting {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .htmx-request#gallery-submit-spinner,
+    .htmx-request #gallery-submit-spinner {
+        display: inline-block;
+    }
+</style>
+
+<script>
+    function toggleGalleryPhotoOptions() {
+        const typeSelect = document.getElementById('gallery-type-select');
+        const locModeSelect = document.getElementById('gallery-location-mode-select');
+        const photoSection = document.getElementById('photo-location-section');
+        const nameGroup = document.getElementById('photo-location-name-group');
+        const coordsGroup = document.getElementById('photo-location-coords-group');
+
+        if (!typeSelect || !photoSection) return;
+
+        const isPhoto = typeSelect.value === 'Photo' || typeSelect.value === '1';
+        photoSection.classList.toggle('hidden', !isPhoto);
+
+        if (locModeSelect && nameGroup && coordsGroup) {
+            const mode = locModeSelect.value;
+            const isHidden = mode === 'Hidden' || mode === '2';
+            const isOverridden = mode === 'Overridden' || mode === '1';
+
+            nameGroup.classList.toggle('hidden', isHidden);
+            coordsGroup.classList.toggle('hidden', !isOverridden);
+        }
+    }
+</script>

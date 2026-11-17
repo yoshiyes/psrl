@@ -160,4 +160,95 @@
   <data name="Field_Name" xml:space="preserve"><value>Name</value></data>
   <data name="Field_Emoji" xml:space="preserve"><value>Emoji</value></data>
   <data name="Field_RememberMe" xml:space="preserve"><value>Remember me</value></data>
+
+  <data name="Nav_Gallery" xml:space="preserve"><value>Gallery</value></data>
+  <data name="Nav_AdminGallery" xml:space="preserve"><value>A: Gallery</value></data>
+  <data name="Nav_AdminTags" xml:space="preserve"><value>A: Tags</value></data>
+
+  <data name="Pagination_Gallery_Plural" xml:space="preserve"><value>items</value></data>
+  <data name="Pagination_Gallery_Singular" xml:space="preserve"><value>item</value></data>
+  <data name="Pagination_Tags_Plural" xml:space="preserve"><value>tags</value></data>
+  <data name="Pagination_Tags_Singular" xml:space="preserve"><value>tag</value></data>
+
+  <data name="Gallery_Title" xml:space="preserve"><value>Image &amp; Photo Gallery</value></data>
+  <data name="Gallery_SearchPlaceholder" xml:space="preserve"><value>Search an image, description, location or camera</value></data>
+  <data name="Gallery_Filter_TypeAll" xml:space="preserve"><value>All types</value></data>
+  <data name="Gallery_Type_Image" xml:space="preserve"><value>Image</value></data>
+  <data name="Gallery_Type_Photo" xml:space="preserve"><value>Photo</value></data>
+  <data name="Gallery_Empty" xml:space="preserve"><value>No image or photo found.</value></data>
+  <data name="Gallery_PreviewAction" xml:space="preserve"><value>Quick preview</value></data>
+  <data name="Gallery_ViewDetails" xml:space="preserve"><value>Details</value></data>
+  <data name="Gallery_ViewAllInfo" xml:space="preserve"><value>View all information</value></data>
+  <data name="Gallery_Modal_Close" xml:space="preserve"><value>Close preview</value></data>
+  <data name="Gallery_BackToGallery" xml:space="preserve"><value>Back to gallery</value></data>
+  <data name="Gallery_DownloadOriginal" xml:space="preserve"><value>Download original file</value></data>
+  <data name="Gallery_Tags" xml:space="preserve"><value>Image tags</value></data>
+
+  <data name="Gallery_Exif_Title" xml:space="preserve"><value>Camera &amp; Exposure (EXIF)</value></data>
+  <data name="Gallery_Exif_Camera" xml:space="preserve"><value>Camera</value></data>
+  <data name="Gallery_Exif_Lens" xml:space="preserve"><value>Lens</value></data>
+  <data name="Gallery_Exif_FocalLength" xml:space="preserve"><value>Focal length</value></data>
+  <data name="Gallery_Exif_Aperture" xml:space="preserve"><value>Aperture</value></data>
+  <data name="Gallery_Exif_ShutterSpeed" xml:space="preserve"><value>Exposure time</value></data>
+  <data name="Gallery_Exif_Iso" xml:space="preserve"><value>ISO speed</value></data>
+  <data name="Gallery_Exif_TakenAt" xml:space="preserve"><value>Taken on</value></data>
+  <data name="Gallery_Exif_None" xml:space="preserve"><value>No exposure metadata available for this photo.</value></data>
+
+  <data name="Gallery_Location_Title" xml:space="preserve"><value>Location</value></data>
+  <data name="Gallery_Location_Coordinates" xml:space="preserve"><value>GPS coordinates</value></data>
+  <data name="Gallery_Location_OpenMap" xml:space="preserve"><value>View on OpenStreetMap</value></data>
+
+  <data name="Gallery_Info_Title" xml:space="preserve"><value>File information</value></data>
+  <data name="Gallery_Info_Dimensions" xml:space="preserve"><value>Dimensions</value></data>
+  <data name="Gallery_Info_FileSize" xml:space="preserve"><value>File size</value></data>
+
+  <data name="Gallery_Field_File" xml:space="preserve"><value>Image / photo file</value></data>
+  <data name="Gallery_Field_ReplaceFile" xml:space="preserve"><value>Replace file (optional)</value></data>
+  <data name="Gallery_Field_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Gallery_Field_TitleOptional" xml:space="preserve"><value>Title (optional)</value></data>
+  <data name="Gallery_Field_TitlePlaceholder" xml:space="preserve"><value>Leave blank to use file name</value></data>
+  <data name="Gallery_Field_DescriptionPlaceholder" xml:space="preserve"><value>Add a description for this image or photo...</value></data>
+  <data name="Gallery_Photo_LocationSettings" xml:space="preserve"><value>Photo location &amp; privacy settings</value></data>
+  <data name="Gallery_Field_LocationMode" xml:space="preserve"><value>Location handling (EXIF metadata &amp; display)</value></data>
+  <data name="Gallery_LocationMode_Original" xml:space="preserve"><value>Keep original EXIF location</value></data>
+  <data name="Gallery_LocationMode_Overridden" xml:space="preserve"><value>Rewrite location (metadata + website)</value></data>
+  <data name="Gallery_LocationMode_Hidden" xml:space="preserve"><value>Hide location (strip from metadata + hide on website)</value></data>
+  <data name="Gallery_Field_LocationName" xml:space="preserve"><value>Location name</value></data>
+  <data name="Gallery_Field_LocationNamePlaceholder" xml:space="preserve"><value>E.g. Paris, France</value></data>
+  <data name="Gallery_Field_Latitude" xml:space="preserve"><value>Latitude</value></data>
+  <data name="Gallery_Field_Longitude" xml:space="preserve"><value>Longitude</value></data>
+  <data name="Gallery_Field_NewTags" xml:space="preserve"><value>Add new tags</value></data>
+  <data name="Gallery_Field_NewTagsPlaceholder" xml:space="preserve"><value>E.g. 🏔️ Mountain, Portrait, Black and white</value></data>
+  <data name="Gallery_Field_NewTagsHelp" xml:space="preserve"><value>Separate new tags with a comma. You can prefix a tag with an emoji followed by a space.</value></data>
+
+  <data name="Admin_Gallery_Title" xml:space="preserve"><value>Gallery administration</value></data>
+  <data name="Admin_Gallery_New" xml:space="preserve"><value>Upload image / photo</value></data>
+  <data name="Admin_Gallery_SelectAction" xml:space="preserve"><value>Select an action to upload or edit an image or photo.</value></data>
+  <data name="Admin_Gallery_FilterAllTags" xml:space="preserve"><value>All tags</value></data>
+  <data name="Admin_Gallery_Column_Preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Admin_Gallery_LocationOriginal" xml:space="preserve"><value>Original EXIF</value></data>
+  <data name="Admin_Gallery_LocationOverridden" xml:space="preserve"><value>Rewritten location</value></data>
+  <data name="Admin_Gallery_LocationHidden" xml:space="preserve"><value>Hidden location</value></data>
+  <data name="Admin_Gallery_DeleteConfirm" xml:space="preserve"><value>Delete this image / photo ?</value></data>
+  <data name="Admin_GalleryForm_CreateTitle" xml:space="preserve"><value>Upload an image or photo</value></data>
+  <data name="Admin_GalleryForm_EditTitle" xml:space="preserve"><value>Edit image or photo</value></data>
+
+  <data name="Admin_Tags_Title" xml:space="preserve"><value>Image tags administration</value></data>
+  <data name="Admin_Tags_New" xml:space="preserve"><value>New tag</value></data>
+  <data name="Admin_Tags_SearchPlaceholder" xml:space="preserve"><value>Search a tag</value></data>
+  <data name="Admin_Tags_SelectAction" xml:space="preserve"><value>Select an action to create or edit an image tag.</value></data>
+  <data name="Admin_Tags_Empty" xml:space="preserve"><value>No tag found.</value></data>
+  <data name="Admin_Tags_DeleteConfirm" xml:space="preserve"><value>Delete this tag ?</value></data>
+  <data name="Admin_Tags_Created" xml:space="preserve"><value>Tag created.</value></data>
+  <data name="Admin_Tags_Updated" xml:space="preserve"><value>Tag updated.</value></data>
+  <data name="Admin_Tags_Deleted" xml:space="preserve"><value>Tag deleted.</value></data>
+  <data name="Admin_Tags_DeleteBlocked" xml:space="preserve"><value>Cannot delete: this tag is still associated with gallery items.</value></data>
+  <data name="Admin_TagForm_Create" xml:space="preserve"><value>Create tag</value></data>
+  <data name="Admin_TagForm_Edit" xml:space="preserve"><value>Edit tag</value></data>
+
+  <data name="Validation_ImageFile_Required" xml:space="preserve"><value>Please select a valid image file.</value></data>
+  <data name="Validation_ImageFile_Invalid" xml:space="preserve"><value>The selected file is not a supported image format.</value></data>
+  <data name="Validation_GalleryDescription_Length" xml:space="preserve"><value>The description must not exceed 1200 characters.</value></data>
+  <data name="Validation_Latitude_Range" xml:space="preserve"><value>Latitude must be between -90 and 90.</value></data>
+  <data name="Validation_Longitude_Range" xml:space="preserve"><value>Longitude must be between -180 and 180.</value></data>
 </root>

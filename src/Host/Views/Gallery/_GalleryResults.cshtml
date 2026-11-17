@@ -1,0 +1,17 @@
+@model Passerelle.Host.ViewModels.GalleryIndexViewModel
+
+<div id="gallery-grid" class="grow p-5">
+    @await Html.PartialAsync("_GalleryGrid", Model)
+</div>
+
+<div class="grow border-t border-gray-200 px-5 py-4 dark:border-gray-700">
+    @await Html.PartialAsync("_Pagination", new Passerelle.Host.ViewModels.PaginationViewModel
+    {
+        Page = Model.Page,
+        TotalCount = Model.TotalCount,
+        TotalPages = Model.TotalPages,
+        FormId = "gallery-filters-form",
+        SingularLabel = L["Pagination_Gallery_Singular"].Value,
+        PluralLabel = L["Pagination_Gallery_Plural"].Value
+    })
+</div>

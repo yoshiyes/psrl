@@ -12,6 +12,9 @@ public class ApplicationDbContext(DbContextOptions options)
     public DbSet<Link> Links => Set<Link>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<LinkCategory> LinkCategories => Set<LinkCategory>();
+    public DbSet<GalleryItem> GalleryItems => Set<GalleryItem>();
+    public DbSet<ImageTag> ImageTags => Set<ImageTag>();
+    public DbSet<GalleryItemTag> GalleryItemTags => Set<GalleryItemTag>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,6 +80,117 @@ public class ApplicationDbContext(DbContextOptions options)
             .Property(c => c.Description)
             .IsRequired()
             .HasMaxLength(1200);
+
+        #endregion
+
+        #region ImageTag
+
+        modelBuilder.Entity<ImageTag>()
+            .HasKey(t => t.Id);
+        modelBuilder.Entity<ImageTag>()
+            .HasIndex(t => t.Name)
+            .IsUnique();
+        modelBuilder.Entity<ImageTag>()
+            .Property(t => t.Name)
+            .IsRequired()
+            .HasMaxLength(80);
+        modelBuilder.Entity<ImageTag>()
+            .HasIndex(t => t.Slug)
+            .IsUnique();
+        modelBuilder.Entity<ImageTag>()
+            .Property(t => t.Slug)
+            .IsRequired()
+            .HasMaxLength(120);
+        modelBuilder.Entity<ImageTag>()
+            .Property(t => t.Emoji)
+            .HasMaxLength(32);
+
+        #endregion
+
+        #region GalleryItemTag
+
+        modelBuilder.Entity<GalleryItemTag>()
+            .HasKey(x => new { x.GalleryItemId, x.ImageTagId });
+
+        modelBuilder.Entity<GalleryItemTag>()
+            .HasOne(x => x.GalleryItem)
+            .WithMany(x => x.GalleryItemTags)
+            .HasForeignKey(x => x.GalleryItemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<GalleryItemTag>()
+            .HasOne(x => x.ImageTag)
+            .WithMany(x => x.GalleryItemTags)
+            .HasForeignKey(x => x.ImageTagId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        #endregion
+
+        #region GalleryItem
+
+        modelBuilder.Entity<GalleryItem>()
+            .HasKey(g => g.Id);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.Title)
+            .HasMaxLength(160);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.Description)
+            .HasMaxLength(1200);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.OriginalFileName)
+            .IsRequired()
+            .HasMaxLength(260);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.StoredFileName)
+            .IsRequired()
+            .HasMaxLength(120);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.ThumbnailFileName)
+            .IsRequired()
+            .HasMaxLength(120);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.PreviewFileName)
+            .IsRequired()
+            .HasMaxLength(120);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.ContentType)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.CameraMake)
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.CameraModel)
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.LensModel)
+            .HasMaxLength(160);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.FocalLength)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.Aperture)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.ShutterSpeed)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.LocationName)
+            .HasMaxLength(160);
 
         #endregion
     }
