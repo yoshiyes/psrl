@@ -29,6 +29,8 @@ services:
       # Auth route
       Authentication__AuthRoute: "/auth"
       Authentication__LoginPath: "/auth/login"
+    volumes:
+      - passerelle_data:/app/data
     depends_on:
       - db
     networks:
@@ -36,6 +38,7 @@ services:
 
 volumes:
   db_data:
+  passerelle_data:
 
 networks:
   links-network:

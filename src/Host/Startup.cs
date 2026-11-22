@@ -6,6 +6,7 @@ using Passerelle.Domain.Entities;
 using Passerelle.Host.Data;
 using Passerelle.Host.Interfaces;
 using Passerelle.Host.Repositories;
+using Passerelle.Host.Services;
 using Serilog;
 
 namespace Passerelle.Host;
@@ -22,6 +23,9 @@ public static class Startup
 
         builder.Services.AddScoped<ILinkRepository, LinkRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
+        builder.Services.AddScoped<IImageTagRepository, ImageTagRepository>();
+        builder.Services.AddSingleton<IGalleryStorageService, GalleryStorageService>();
 
         builder.Services.AddLocalization();
 

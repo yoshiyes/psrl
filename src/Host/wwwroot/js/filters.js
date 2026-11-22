@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const isPaginationButton = submitter?.name === "page";
             const isSortButton = submitter?.name === "sort";
-            const isCategoryFilter = target?.matches?.("[name='category']");
+            const isCategoryFilter = target?.matches?.("[name='category'], [name='tag'], [name='type']");
             const isSearchInput = target?.matches?.("input[name='q']");
 
             if (isPaginationButton) {

@@ -20,7 +20,9 @@
         }
     }
 
-    string totalLabel = totalCount > 1 ? L["Pagination_Links_Plural"].Value : L["Pagination_Links_Singular"].Value;
+    string singularLabel = Model.SingularLabel ?? L["Pagination_Links_Singular"].Value;
+    string pluralLabel = Model.PluralLabel ?? L["Pagination_Links_Plural"].Value;
+    string totalLabel = totalCount > 1 ? pluralLabel : singularLabel;
 }
 
 <div class="text-center dark:text-gray-100">

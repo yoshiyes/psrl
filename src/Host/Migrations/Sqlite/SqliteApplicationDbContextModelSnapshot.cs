@@ -15,7 +15,7 @@ namespace Passerelle.Host.Migrations.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -248,6 +248,173 @@ namespace Passerelle.Host.Migrations.Sqlite
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Aperture")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CameraMake")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CameraModel")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("FileSizeBytes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FocalLength")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Iso")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("LensModel")
+                        .HasMaxLength(160)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LocationMode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LocationName")
+                        .HasMaxLength(160)
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviewFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShutterSpeed")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TakenAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ThumbnailFileName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GalleryItems");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItemTag", b =>
+                {
+                    b.Property<Guid>("GalleryItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ImageTagId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GalleryItemId", "ImageTagId");
+
+                    b.HasIndex("ImageTagId");
+
+                    b.ToTable("GalleryItemTags");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.ImageTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Emoji")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("ImageTags");
+                });
+
             modelBuilder.Entity("Passerelle.Domain.Entities.Link", b =>
                 {
                     b.Property<Guid>("Id")
@@ -352,6 +519,25 @@ namespace Passerelle.Host.Migrations.Sqlite
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItemTag", b =>
+                {
+                    b.HasOne("Passerelle.Domain.Entities.GalleryItem", "GalleryItem")
+                        .WithMany("GalleryItemTags")
+                        .HasForeignKey("GalleryItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Passerelle.Domain.Entities.ImageTag", "ImageTag")
+                        .WithMany("GalleryItemTags")
+                        .HasForeignKey("ImageTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GalleryItem");
+
+                    b.Navigation("ImageTag");
+                });
+
             modelBuilder.Entity("Passerelle.Domain.Entities.LinkCategory", b =>
                 {
                     b.HasOne("Passerelle.Domain.Entities.Category", "Category")
@@ -374,6 +560,16 @@ namespace Passerelle.Host.Migrations.Sqlite
             modelBuilder.Entity("Passerelle.Domain.Entities.Category", b =>
                 {
                     b.Navigation("LinkCategories");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.GalleryItem", b =>
+                {
+                    b.Navigation("GalleryItemTags");
+                });
+
+            modelBuilder.Entity("Passerelle.Domain.Entities.ImageTag", b =>
+                {
+                    b.Navigation("GalleryItemTags");
                 });
 
             modelBuilder.Entity("Passerelle.Domain.Entities.Link", b =>

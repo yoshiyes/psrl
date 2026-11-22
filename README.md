@@ -1,6 +1,6 @@
 # Passerelle
 
-A self-hosted link aggregator for curating and sharing links, organized by categories.
+A self-hosted link aggregator and photo/drawing gallery for curating and sharing links and visual media, organized by categories and tags.
 
 ![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)
 ![.[Host.csproj](src/Host/Host.csproj)NET](https://img.shields.io/badge/.NET-10-512BD4.svg)
@@ -12,8 +12,10 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 ## Features
 
 - **Public link board** with search, filtering, sorting, and pagination.
+- **Photo & drawing gallery** (`/gallery`) with search, type/tag filtering, quick-preview modal, EXIF metadata display, and original file download.
+- **Location privacy controls** — keep original EXIF GPS data, override location metadata, or strip GPS coordinates from uploaded photos.
 - **RSS feed** at `/feed.xml` (last 50 links).
-- **Admin area** (`/admin`) — full CRUD management for links and categories.
+- **Admin area** (`/admin`) — full CRUD management for links, categories, gallery items, and image tags.
 - **Dual database support** — PostgreSQL (with native full-text search) or SQLite (embedded).
 - **Dark mode** with `localStorage` and `prefers-color-scheme` support.
 - **NO SPA** — fast server rendering powered by HTMX 4.
@@ -41,13 +43,14 @@ A self-hosted link aggregator for curating and sharing links, organized by categ
 └── src/
     ├── Domain/                # Entities and domain logic
     └── Host/                  # Web application
-        ├── Areas/Admin/       # Administration area
-        ├── Controllers/       # Public controllers, authentication, RSS
+        ├── Areas/Admin/       # Administration area (Links, Categories, Gallery, GalleryTags)
+        ├── Controllers/       # Public controllers (Home, Gallery, Auth, RSS, Culture)
         ├── Data/              # DbContext and seeding data
         ├── Repositories/      # Data access layer
+        ├── Services/          # Image processing, EXIF & gallery storage service
         ├── ViewModels/        # View models
         ├── Migrations/        # EF Core migrations
-        ├── Views/             # Razor views
+        ├── Views/             # Razor views and layouts
         └── wwwroot/           # Static assets and compiled CSS
 ```
 
@@ -75,6 +78,8 @@ services:
       UserAdmin__Password: ChangeMe12345@
       Authentication__AuthRoute: "/auth"
       Authentication__LoginPath: "/auth/login"
+    volumes:
+      - passerelle_data:/app/data
     depends_on:
       - db
 
@@ -91,6 +96,7 @@ services:
 
 volumes:
   db_data:
+  passerelle_data:
 ```
 
 ```bash
@@ -131,6 +137,7 @@ docker compose -f compose.sqlite.yaml up -d
 ### 3. Access the application
 
 - **Public board:** `http://localhost:8080`
+- **Public gallery:** `http://localhost:8080/gallery`
 - **Admin area:** `http://localhost:8080/admin`
 - **Admin login:** `http://localhost:8080/auth/login`
 
@@ -203,6 +210,7 @@ Passerelle can be configured via `src/Host/appsettings.json` or environment vari
 |---|---|---|
 | `DatabaseProvider` | Database engine (`PostgreSql` or `Sqlite`). Auto-detected if connection string contains `Data Source=`. | `SQLite` |
 | `ConnectionStrings__DefaultConnection` | Database connection string. For SQLite, e.g. `Data Source=data/passerelle.db`. | `Host=localhost;Port=5432;Database=passerelle;Username=postgres;Password=password` |
+| `Gallery__StoragePath` | Directory path used to store original gallery images and generated thumbnails | `data/gallery` |
 | `UserAdmin__Email` | Email for the initial administrator | `admin@linkshare.local` |
 | `UserAdmin__Password` | Password for the initial administrator | `Admin12345@` |
 | `Authentication__AuthRoute` | Base route for auth controller | `/auth` |

@@ -1,0 +1,40 @@
+@model Passerelle.Host.ViewModels.GalleryIndexViewModel
+
+@if (Model.Items.Count == 0)
+{
+    <div class="px-4 py-12 text-center text-sm text-stone-500 dark:text-gray-400">
+        @L["Gallery_Empty"]
+    </div>
+}
+else
+{
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @foreach (var item in Model.Items)
+        {
+            var displayTitle = string.IsNullOrWhiteSpace(item.Title) ? item.OriginalFileName : item.Title;
+
+            <article class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-100 shadow-xs transition hover:border-orange-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-orange-500/70">
+                <!-- Lightweight Thumbnail Trigger -->
+                <button
+                    type="button"
+                    hx-get="/gallery/preview/@item.Id"
+                    hx-target="#gallery-preview-modal"
+                    hx-swap="innerHTML"
+                    class="relative block aspect-4/3 w-full cursor-pointer overflow-hidden text-left focus:outline-none"
+                    title="@displayTitle">
+                    <img
+                        src="/gallery/media/@item.Id/thumb"
+                        alt="@(string.IsNullOrWhiteSpace(item.Description) ? displayTitle : item.Description)"
+                        loading="lazy"
+                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
+
+                    <div class="pointer-events-none absolute inset-0 flex items-end bg-linear-to-t from-black/75 via-black/25 to-transparent p-4 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+                        <h3 class="line-clamp-2 text-sm font-semibold text-white drop-shadow-xs">
+                            @displayTitle
+                        </h3>
+                    </div>
+                </button>
+            </article>
+        }
+    </div>
+}

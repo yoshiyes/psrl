@@ -21,5 +21,17 @@ public sealed class PostgreSqlApplicationDbContext(DbContextOptions<PostgreSqlAp
         modelBuilder.Entity<Link>()
             .HasIndex(c => c.SearchVector)
             .HasMethod("GIN");
+
+        modelBuilder.Entity<GalleryItem>()
+            .Property(g => g.SearchVector)
+            .HasComputedColumnSql(
+                "setweight(to_tsvector('unaccent_simple', coalesce(\"Title\", '')), 'A') || " +
+                "setweight(to_tsvector('unaccent_simple', coalesce(\"Description\", '')), 'B') || " +
+                "setweight(to_tsvector('unaccent_simple', coalesce(\"LocationName\", '') || ' ' || coalesce(\"CameraMake\", '') || ' ' || coalesce(\"CameraModel\", '')), 'C')",
+                stored: true);
+
+        modelBuilder.Entity<GalleryItem>()
+            .HasIndex(g => g.SearchVector)
+            .HasMethod("GIN");
     }
 }

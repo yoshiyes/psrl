@@ -1,0 +1,21 @@
+@model Passerelle.Host.ViewModels.GalleryFormViewModel
+@{
+    ViewData["Title"] = L["Admin_GalleryForm_CreateTitle"].Value;
+}
+
+@section PageActions {
+    <div class="flex flex-none items-center justify-center gap-2 rounded-sm py-3 pl-2 sm:justify-end sm:bg-transparent">
+        <a asp-area="Admin" asp-controller="Gallery" asp-action="Index"
+           class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-gray-600 dark:hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd"/>
+            </svg>
+            <span>@L["Gallery_BackToGallery"]</span>
+        </a>
+    </div>
+}
+
+<div id="gallery-form-container">
+    @await Html.PartialAsync("_GalleryForm", Model)
+</div>
+
