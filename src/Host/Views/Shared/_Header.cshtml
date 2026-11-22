@@ -1,5 +1,8 @@
 @using System.Globalization
+@using Passerelle.Host.Interfaces
+@inject ISiteSettingsService SiteSettingsService
 @{
+    bool isGalleryEnabled = await SiteSettingsService.IsGalleryEnabledAsync();
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
 
@@ -46,10 +49,13 @@
                        class="@NavClass("Home")">
                         @L["Nav_Home"]
                     </a>
-                    <a asp-area="" asp-controller="Gallery" asp-action="Index"
-                       class="@NavClass("Gallery")">
-                        <span>@L["Nav_Gallery"]</span>
-                    </a>
+                    @if (isGalleryEnabled)
+                    {
+                        <a asp-area="" asp-controller="Gallery" asp-action="Index"
+                           class="@NavClass("Gallery")">
+                            <span>@L["Nav_Gallery"]</span>
+                        </a>
+                    }
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <a asp-area="Admin" asp-controller="Links" asp-action="Index"

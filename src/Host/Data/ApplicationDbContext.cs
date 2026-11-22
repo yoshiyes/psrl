@@ -15,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions options)
     public DbSet<GalleryItem> GalleryItems => Set<GalleryItem>();
     public DbSet<ImageTag> ImageTags => Set<ImageTag>();
     public DbSet<GalleryItemTag> GalleryItemTags => Set<GalleryItemTag>();
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -191,6 +192,17 @@ public class ApplicationDbContext(DbContextOptions options)
         modelBuilder.Entity<GalleryItem>()
             .Property(g => g.LocationName)
             .HasMaxLength(160);
+
+        #endregion
+
+        #region SiteSettings
+
+        modelBuilder.Entity<SiteSettings>()
+            .HasKey(s => s.Id);
+
+        modelBuilder.Entity<SiteSettings>()
+            .Property(s => s.IsGalleryEnabled)
+            .HasDefaultValue(true);
 
         #endregion
     }

@@ -253,4 +253,15 @@
   <data name="Validation_GalleryDescription_Length" xml:space="preserve"><value>La description ne doit pas dépasser 1200 caractères.</value></data>
   <data name="Validation_Latitude_Range" xml:space="preserve"><value>La latitude doit être comprise entre -90 et 90.</value></data>
   <data name="Validation_Longitude_Range" xml:space="preserve"><value>La longitude doit être comprise entre -180 et 180.</value></data>
+
+  <data name="Nav_AdminSettings" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Admin_Settings_Title" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Admin_Settings_Saved" xml:space="preserve"><value>Paramètres enregistrés.</value></data>
+  <data name="Admin_Settings_Features_Title" xml:space="preserve"><value>Fonctionnalités</value></data>
+  <data name="Admin_Settings_Features_Description" xml:space="preserve"><value>Activez ou désactivez les modules optionnels de Passerelle. La désactivation masque les menus et les routes sans supprimer les données existantes.</value></data>
+  <data name="Admin_Settings_Gallery_Label" xml:space="preserve"><value>Galerie d’images</value></data>
+  <data name="Admin_Settings_Gallery_Help" xml:space="preserve"><value>Affiche la galerie publique ainsi que la gestion des médias et des tags dans l’administration.</value></data>
+  <data name="Admin_Settings_Gallery_Enabled" xml:space="preserve"><value>Activée</value></data>
+  <data name="Admin_Settings_Gallery_Disabled" xml:space="preserve"><value>Désactivée</value></data>
+  <data name="Admin_Settings_Save" xml:space="preserve"><value>Enregistrer les préférences</value></data>
 </root>
