@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Passerelle.Domain.Entities;
+using Passerelle.Host.Filters;
 using Passerelle.Host.Interfaces;
 using Passerelle.Host.ViewModels;
 
 namespace Passerelle.Host.Controllers;
 
 [Route("gallery")]
+[RequireGalleryEnabled]
 public sealed class GalleryController(
     IGalleryRepository galleryRepository,
     IImageTagRepository tagRepository,

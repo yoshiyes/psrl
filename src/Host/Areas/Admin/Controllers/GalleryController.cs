@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Primitives;
 using Passerelle.Domain.Entities;
+using Passerelle.Host.Filters;
 using Passerelle.Host.Interfaces;
 using Passerelle.Host.ViewModels;
 
@@ -11,6 +12,7 @@ namespace Passerelle.Host.Areas.Admin.Controllers;
 [Area("Admin")]
 [Route("admin/gallery")]
 [Authorize(Roles = "Admin")]
+[RequireGalleryEnabled]
 public sealed class GalleryController(
     IGalleryRepository galleryRepository,
     IImageTagRepository tagRepository,

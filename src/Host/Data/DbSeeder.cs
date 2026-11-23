@@ -54,6 +54,12 @@ public static class DbSeeder
             IdentityResult roleResult = await userManager.AddToRoleAsync(admin, adminRole);
             ThrowIfFailed(roleResult, "Unable to add admin user to Admin role");
         }
+
+        if (!await db.SiteSettings.AnyAsync())
+        {
+            db.SiteSettings.Add(new SiteSettings { IsGalleryEnabled = true });
+            await db.SaveChangesAsync();
+        }
         
         if (!environment.IsDevelopment()) return;
 

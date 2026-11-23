@@ -1,0 +1,84 @@
+@model Passerelle.Host.ViewModels.AdminSettingsViewModel
+@{
+    ViewData["Title"] = L["Admin_Settings_Title"].Value;
+}
+
+<div class="space-y-6">
+    @if (Model.Saved)
+    {
+        <div
+            class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-900/20 dark:text-emerald-300">
+            @L["Admin_Settings_Saved"]
+        </div>
+    }
+
+    <div
+        class="flex flex-col overflow-hidden rounded-lg bg-white shadow-xs dark:bg-gray-800 dark:text-gray-100">
+        <!-- Header -->
+        <div class="bg-gray-50 px-5 py-4 dark:bg-gray-700/50">
+            <h3 class="flex items-center gap-2 font-semibold">
+                <svg
+                    class="hi-mini hi-cog-6-tooth inline-block size-5 text-orange-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a6.993 6.993 0 0 1 1.929 1.115l1.598-.54a1 1 0 0 1 1.186.447l1.18 2.044a1 1 0 0 1-.205 1.251l-1.267 1.113a7.047 7.047 0 0 1 0 2.228l1.267 1.113a1 1 0 0 1 .206 1.25l-1.18 2.045a1 1 0 0 1-1.187.447l-1.598-.54a6.993 6.993 0 0 1-1.929 1.115l-.33 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a6.993 6.993 0 0 1-1.929-1.115l-1.598.54a1 1 0 0 1-1.186-.447l-1.18-2.044a1 1 0 0 1 .205-1.251l1.267-1.114a7.05 7.05 0 0 1 0-2.227L1.821 7.773a1 1 0 0 1-.206-1.25l1.18-2.045a1 1 0 0 1 1.187-.447l1.598.54A6.992 6.992 0 0 1 7.51 3.456l.33-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <span>@L["Admin_Settings_Features_Title"]</span>
+            </h3>
+        </div>
+        <!-- END Header -->
+
+        <!-- Body -->
+        <div class="grow p-5 md:flex md:gap-5">
+            <p class="mb-5 text-sm text-gray-500 md:w-1/3 md:flex-none dark:text-gray-400">
+                @L["Admin_Settings_Features_Description"]
+            </p>
+            <form method="post"
+                  action="/admin/settings"
+                  hx-post="/admin/settings"
+                  class="space-y-6 md:w-1/2">
+                @Html.AntiForgeryToken()
+
+                <div class="space-y-2">
+                    <div class="font-medium">@L["Admin_Settings_Gallery_Label"]</div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        @L["Admin_Settings_Gallery_Help"]
+                    </p>
+                    <div class="space-y-1 pt-1">
+                        <label class="inline-flex cursor-pointer items-center">
+                            <input
+                                type="radio"
+                                name="IsGalleryEnabled"
+                                id="gallery-enabled-true"
+                                value="true"
+                                checked="@(Model.IsGalleryEnabled)"
+                                class="size-4 border border-gray-200 text-orange-500 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-600 dark:bg-gray-800 dark:ring-offset-gray-900 dark:checked:border-transparent dark:checked:bg-orange-500 dark:focus:border-orange-500"/>
+                            <span class="ml-2 text-sm">@L["Admin_Settings_Gallery_Enabled"]</span>
+                        </label>
+                        <label class="ml-6 inline-flex cursor-pointer items-center">
+                            <input
+                                type="radio"
+                                name="IsGalleryEnabled"
+                                id="gallery-enabled-false"
+                                value="false"
+                                checked="@(!Model.IsGalleryEnabled)"
+                                class="size-4 border border-gray-200 text-orange-500 focus:border-orange-500 focus:ring-3 focus:ring-orange-500/50 dark:border-gray-600 dark:bg-gray-800 dark:ring-offset-gray-900 dark:checked:border-transparent dark:checked:bg-orange-500 dark:focus:border-orange-500"/>
+                            <span class="ml-2 text-sm">@L["Admin_Settings_Gallery_Disabled"]</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-orange-700 bg-orange-700 px-3 py-2 text-sm leading-5 font-semibold text-white hover:border-orange-600 hover:bg-orange-600 hover:text-white focus:ring-3 focus:ring-orange-400/50 active:border-orange-700 active:bg-orange-700 dark:focus:ring-orange-400/90">
+                    @L["Admin_Settings_Save"]
+                </button>
+            </form>
+        </div>
+        <!-- END Body -->
+    </div>
+</div>

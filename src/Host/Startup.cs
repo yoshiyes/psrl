@@ -21,6 +21,8 @@ public static class Startup
 
         builder.UseDatabase();
 
+        builder.Services.AddMemoryCache();
+        builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
         builder.Services.AddScoped<ILinkRepository, LinkRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
